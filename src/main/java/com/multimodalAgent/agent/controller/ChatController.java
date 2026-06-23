@@ -59,9 +59,9 @@ public class ChatController {
         boolean hasText = message != null && !message.isBlank();
         boolean hasAnyFile = audio != null || image != null || video != null;
         if (!hasText && !hasAnyFile) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "请至少输入文字或上传一个多模态文件。");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Please enter text or upload at least one multimodal file.");
         }
-        String text = hasText ? message.trim() : "学生上传了多模态内容，希望获得支持。";
+        String text = hasText ? message.trim() : "The student uploaded multimodal content and would like support.";
         ChatRequest request = new ChatRequest(sessionId, text);
         return multimodalInputService.analyze(text, monoOrEmpty(audio), monoOrEmpty(image), monoOrEmpty(video))
                 .flatMapMany(analysis -> chatService.streamMultimodal(currentUser.getId(), request, analysis));
@@ -72,7 +72,7 @@ public class ChatController {
         boolean isAdmin = currentUser.getAuthorities().stream()
                 .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority()));
         if (isAdmin) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "管理员账号只能查看后台记录，不能发起学生对话。");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Counselor accounts can only view records and cannot start student conversations.");
         }
     }
 

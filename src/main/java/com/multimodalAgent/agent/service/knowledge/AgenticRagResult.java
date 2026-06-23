@@ -13,14 +13,14 @@ public record AgenticRagResult(
         boolean sufficient
 ) {
     public static AgenticRagResult empty() {
-        return new AgenticRagResult("未触发 RAG", List.of(), List.of(), "无", false);
+        return new AgenticRagResult("RAG was not triggered.", List.of(), List.of(), "None", false);
     }
 
     public String contextBlock() {
         if (evidence.isEmpty()) {
             return """
-                    Agentic RAG 计划：%s
-                    Agentic RAG 复核：未检索到足够知识。回答时必须说明知识库不足，并给出安全、通用建议。
+                    Agentic RAG plan: %s
+                    Agentic RAG review: insufficient knowledge was retrieved. The answer must state that the knowledge base is insufficient and provide safe general guidance.
                     """.formatted(plan);
         }
         String evidenceText = String.join("\n\n", evidence.stream()
@@ -28,11 +28,11 @@ public record AgenticRagResult(
                         .formatted(result.score(), result.content()))
                 .toList());
         return """
-                Agentic RAG 计划：%s
-                Agentic RAG 查询：%s
-                Agentic RAG 复核：%s
-                检索知识：
+                Agentic RAG plan: %s
+                Agentic RAG queries: %s
+                Agentic RAG review: %s
+                Retrieved knowledge:
                 %s
-                """.formatted(plan, String.join("；", queries), review, evidenceText);
+                """.formatted(plan, String.join("; ", queries), review, evidenceText);
     }
 }

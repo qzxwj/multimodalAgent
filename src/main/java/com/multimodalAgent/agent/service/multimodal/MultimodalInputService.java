@@ -65,7 +65,7 @@ public class MultimodalInputService {
                 assessment.emotion(),
                 assessment.emotionScore(),
                 assessment.confidence(),
-                "文本情绪模型：" + assessment.summary());
+                "Text emotion model: " + assessment.summary());
     }
 
     private MultimodalSignal toAudioSignal(String transcript) {
@@ -76,6 +76,6 @@ public class MultimodalInputService {
                 emotion,
                 assessment.emotionScore(),
                 Math.min(0.9, assessment.confidence()),
-                "Whisper 转写后情绪分析：" + transcript);
+                "Emotion analysis after Whisper transcript: " + transcript);
     }
 }

@@ -84,10 +84,10 @@ public class PsychologicalAssessmentService {
 
     private PsychologyAssessment heuristic(String input) {
         String normalized = input.toLowerCase();
-        if (containsAny(normalized, "抑郁", "低落", "压抑", "崩溃", "难过", "depress", "hopeless")) {
+        if (containsAny(normalized, "depress", "depressed", "low mood", "hopeless", "worthless", "empty", "break down", "cry")) {
             return new PsychologyAssessment(EmotionLabel.DEPRESSED, 3.1, RiskLevel.MEDIUM, 0.75, "Low mood keywords detected.");
         }
-        if (containsAny(normalized, "焦虑", "压力", "睡不着", "失眠", "anxious", "stress", "insomnia")) {
+        if (containsAny(normalized, "anxious", "anxiety", "stress", "pressure", "insomnia", "cannot sleep", "overwhelmed")) {
             return new PsychologyAssessment(EmotionLabel.ANXIETY, 2.2, RiskLevel.LOW, 0.72, "Anxiety or pressure keywords detected.");
         }
         return new PsychologyAssessment(EmotionLabel.NORMAL, 0.0, RiskLevel.LOW, 0.66, "No obvious risk signal.");

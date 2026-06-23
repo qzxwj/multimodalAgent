@@ -1,33 +1,35 @@
 :root {
   color-scheme: light;
-  --canvas: #f6f8f5;
-  --canvas-warm: #fbf7f1;
+  --canvas: #f4f6f8;
+  --canvas-deep: #e8eef2;
   --surface: #ffffff;
-  --surface-soft: #f1f7f3;
-  --surface-mist: #e7f2ee;
-  --ink: #172321;
-  --ink-soft: #344642;
-  --muted: #6c7d78;
-  --subtle: #8a9994;
-  --line: #dce6e1;
-  --line-strong: #c8d7d1;
-  --primary: #0f6f64;
-  --primary-dark: #0a4842;
-  --primary-soft: #dcefe9;
-  --blue: #2d728f;
-  --coral: #d4684f;
-  --coral-soft: #fdece6;
-  --warn: #b16b18;
+  --surface-soft: #f7faf9;
+  --surface-tint: #eef7f5;
+  --ink: #16201f;
+  --ink-soft: #334442;
+  --muted: #677774;
+  --subtle: #8a9997;
+  --line: #dce4e7;
+  --line-strong: #c5d1d5;
+  --primary: #0a6f68;
+  --primary-dark: #064d49;
+  --primary-soft: #dff1ee;
+  --blue: #346f8e;
+  --blue-soft: #e7f0f4;
+  --coral: #b86154;
+  --coral-soft: #f7e9e5;
+  --warn: #a76114;
   --warn-soft: #fff0d8;
-  --danger: #b63a50;
-  --danger-soft: #fae7eb;
-  --success: #247a57;
-  --success-soft: #e1f2e9;
-  --shadow: 0 18px 48px rgba(30, 52, 47, 0.10);
-  --soft-shadow: 0 8px 22px rgba(30, 52, 47, 0.07);
+  --danger: #b73352;
+  --danger-soft: #fae6eb;
+  --success: #247955;
+  --success-soft: #e3f2e9;
+  --shadow: 0 22px 54px rgba(24, 39, 45, 0.12);
+  --soft-shadow: 0 10px 28px rgba(24, 39, 45, 0.08);
+  --inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
   --radius: 8px;
   --radius-sm: 6px;
-  --focus: 0 0 0 3px rgba(15, 111, 100, 0.15);
+  --focus: 0 0 0 3px rgba(11, 118, 110, 0.16);
 }
 
 * {
@@ -36,6 +38,7 @@
 
 html {
   min-width: 320px;
+  background: var(--canvas);
 }
 
 body {
@@ -43,9 +46,8 @@ body {
   min-height: 100vh;
   color: var(--ink);
   background:
-    radial-gradient(circle at 12% 8%, rgba(220, 239, 233, 0.9), transparent 26%),
-    radial-gradient(circle at 86% 10%, rgba(253, 236, 230, 0.76), transparent 24%),
-    linear-gradient(135deg, var(--canvas), var(--canvas-warm));
+    linear-gradient(180deg, #eef3f5 0, #f7f8f7 260px, #f2f5f6 100%),
+    var(--canvas);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
   text-rendering: optimizeLegibility;
 }
@@ -60,12 +62,17 @@ button {
   border: 0;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-weight: 750;
+  font-weight: 760;
+  letter-spacing: 0;
   transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
 }
 
 button:hover {
   transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 button:focus-visible,
@@ -95,29 +102,30 @@ p {
 }
 
 h1 {
-  font-size: clamp(20px, 2vw, 26px);
-  line-height: 1.1;
-  font-weight: 760;
+  font-size: 25px;
+  line-height: 1.12;
+  font-weight: 780;
 }
 
 h2 {
-  font-size: clamp(18px, 1.6vw, 23px);
-  line-height: 1.18;
-  font-weight: 740;
+  font-size: 21px;
+  line-height: 1.2;
+  font-weight: 760;
 }
 
 h3 {
   font-size: 16px;
   line-height: 1.25;
+  font-weight: 760;
 }
 
 .kicker {
   margin-bottom: 6px;
-  color: var(--primary-dark);
+  color: #536664;
   font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-weight: 780;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .section-title {
@@ -126,31 +134,34 @@ h3 {
 }
 
 .app-shell {
+  width: min(1680px, 100%);
   min-height: 100vh;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  gap: 16px;
-  padding: 16px;
+  gap: 14px;
+  margin: 0 auto;
+  padding: 14px;
 }
 
 .topbar {
-  min-height: 76px;
+  min-height: 74px;
   display: grid;
-  grid-template-columns: auto minmax(220px, 1fr) auto;
+  grid-template-columns: minmax(240px, auto) minmax(220px, 1fr) auto;
   align-items: center;
-  gap: 16px;
-  padding: 12px 14px;
-  border: 1px solid rgba(220, 230, 225, 0.9);
+  gap: 14px;
+  padding: 12px;
+  border: 1px solid rgba(210, 222, 226, 0.92);
   border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.94);
   box-shadow: var(--soft-shadow);
+  backdrop-filter: blur(18px);
 }
 
 .identity {
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 12px;
-  min-width: 0;
 }
 
 .logo-mark {
@@ -160,11 +171,11 @@ h3 {
   display: grid;
   place-items: center;
   border-radius: var(--radius);
-  background: linear-gradient(135deg, var(--primary-dark), var(--primary) 58%, #73b7a6);
+  background: linear-gradient(135deg, #063b4a, var(--primary) 54%, #72b7a9);
   color: #fff;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 900;
-  box-shadow: 0 14px 26px rgba(15, 111, 100, 0.22);
+  box-shadow: 0 14px 30px rgba(11, 118, 110, 0.24);
 }
 
 .top-status {
@@ -182,11 +193,12 @@ h3 {
   padding: 0 11px;
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: var(--surface-soft);
+  background: #fff;
   color: var(--muted);
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 780;
   white-space: nowrap;
+  box-shadow: var(--inset-shadow);
 }
 
 .status-dot::before {
@@ -233,9 +245,10 @@ textarea {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.98);
   color: var(--ink);
   outline: none;
+  box-shadow: var(--inset-shadow);
 }
 
 .login-strip input {
@@ -248,16 +261,24 @@ textarea {
 #adminRefresh,
 .knowledge-bar button {
   min-height: 36px;
-  padding: 0 13px;
+  padding: 0 14px;
   background: var(--ink);
   color: #fff;
+}
+
+.login-strip button:hover,
+.account-strip button:hover,
+#adminRefresh:hover,
+.knowledge-bar button:hover {
+  background: var(--primary-dark);
+  box-shadow: 0 10px 24px rgba(6, 79, 74, 0.18);
 }
 
 .login-strip p {
   grid-column: 1 / -1;
   color: var(--muted);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 720;
 }
 
 .account-strip {
@@ -275,14 +296,14 @@ textarea {
 .account-strip span {
   color: var(--muted);
   font-size: 12px;
-  font-weight: 750;
+  font-weight: 760;
 }
 
 .student-console {
   min-height: 0;
   display: grid;
-  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr) minmax(250px, 310px);
-  gap: 16px;
+  grid-template-columns: minmax(300px, 380px) minmax(0, 1fr) minmax(260px, 320px);
+  gap: 14px;
 }
 
 .student-intake,
@@ -300,19 +321,19 @@ textarea {
 .admin-head,
 .stat-card,
 .welcome-card {
-  border: 1px solid rgba(220, 230, 225, 0.95);
+  border: 1px solid rgba(213, 225, 228, 0.95);
   border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   box-shadow: var(--soft-shadow);
 }
 
 .welcome-card {
   position: relative;
-  min-height: 196px;
+  min-height: 214px;
   overflow: hidden;
   display: grid;
   align-content: end;
-  background: var(--surface);
+  background: #fff;
 }
 
 .welcome-card img {
@@ -321,14 +342,14 @@ textarea {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.82;
+  opacity: 0.9;
 }
 
 .welcome-card::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(246, 248, 245, 0.96) 72%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0, rgba(244, 248, 248, 0.62) 54%, rgba(255, 255, 255, 0.97) 100%);
 }
 
 .welcome-copy {
@@ -336,13 +357,13 @@ textarea {
   z-index: 1;
   display: grid;
   gap: 8px;
-  padding: 88px 18px 18px;
+  padding: 92px 18px 18px;
 }
 
 .welcome-copy p:not(.kicker) {
   color: var(--ink-soft);
   font-size: 14px;
-  line-height: 1.7;
+  line-height: 1.65;
 }
 
 .intake-card,
@@ -352,6 +373,10 @@ textarea {
   padding: 16px;
 }
 
+.intake-card {
+  border-color: rgba(11, 118, 110, 0.2);
+}
+
 .intake-form {
   display: grid;
   gap: 12px;
@@ -359,7 +384,7 @@ textarea {
 }
 
 textarea {
-  height: 150px;
+  height: 152px;
   min-height: 132px;
   max-height: 300px;
   resize: vertical;
@@ -374,7 +399,7 @@ textarea::placeholder,
 
 textarea:focus,
 .login-strip input:focus {
-  border-color: rgba(15, 111, 100, 0.54);
+  border-color: rgba(11, 118, 110, 0.56);
 }
 
 .sensor-grid {
@@ -385,21 +410,23 @@ textarea:focus,
 
 .sensor-tile {
   position: relative;
-  min-height: 74px;
+  min-height: 76px;
   display: grid;
   align-content: center;
   gap: 6px;
   padding: 10px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: linear-gradient(180deg, #fff, var(--surface-soft));
+  background: linear-gradient(180deg, #fff, #f6faf9);
   cursor: pointer;
-  transition: border-color 0.16s ease, transform 0.16s ease, background 0.16s ease;
+  box-shadow: var(--inset-shadow);
+  transition: border-color 0.16s ease, transform 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
 }
 
 .sensor-tile:hover {
-  border-color: rgba(15, 111, 100, 0.42);
+  border-color: rgba(11, 118, 110, 0.42);
   transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(11, 118, 110, 0.08);
 }
 
 .sensor-tile input,
@@ -414,7 +441,7 @@ textarea:focus,
 .sensor-tile span {
   color: var(--muted);
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 820;
 }
 
 .sensor-tile strong {
@@ -426,15 +453,15 @@ textarea:focus,
   padding: 10px 11px;
   border: 1px dashed var(--line-strong);
   border-radius: var(--radius-sm);
-  background: var(--surface-soft);
+  background: #f8fbfa;
   color: var(--muted);
   font-size: 12px;
-  font-weight: 750;
+  font-weight: 760;
   overflow-wrap: anywhere;
 }
 
 .attachment-tray.active {
-  border-color: rgba(15, 111, 100, 0.46);
+  border-color: rgba(11, 118, 110, 0.46);
   background: var(--primary-soft);
   color: var(--primary-dark);
 }
@@ -451,13 +478,21 @@ textarea:focus,
   border: 1px solid var(--line);
   background: #fff;
   color: var(--ink);
+  box-shadow: var(--inset-shadow);
+}
+
+.secondary:hover,
+.sample-list button:hover,
+.upload-button:hover {
+  border-color: rgba(45, 111, 159, 0.28);
+  background: var(--blue-soft);
 }
 
 .primary {
   min-height: 40px;
   background: var(--primary);
   color: #fff;
-  box-shadow: 0 12px 24px rgba(15, 111, 100, 0.20);
+  box-shadow: 0 14px 28px rgba(11, 118, 110, 0.22);
 }
 
 .primary:hover {
@@ -465,17 +500,22 @@ textarea:focus,
 }
 
 .sample-list {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 8px;
   margin-top: 12px;
 }
 
 .sample-list button {
-  flex: 1 1 120px;
-  padding: 10px 11px;
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 12px;
   color: var(--primary-dark);
   text-align: left;
+}
+
+.sample-list button:first-child {
+  border-color: rgba(10, 111, 104, 0.24);
+  background: linear-gradient(180deg, #fff, var(--primary-soft));
 }
 
 .dialog-stage {
@@ -483,7 +523,8 @@ textarea:focus,
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 24px 64px rgba(24, 39, 45, 0.13);
 }
 
 .stage-head,
@@ -494,7 +535,7 @@ textarea:focus,
   gap: 12px;
   padding: 16px 18px;
   border-bottom: 1px solid var(--line);
-  background: linear-gradient(90deg, #fff, var(--surface-soft));
+  background: linear-gradient(90deg, #fff, #f4f8f7);
 }
 
 .session-chip {
@@ -508,6 +549,7 @@ textarea:focus,
   color: var(--muted);
   font-size: 12px;
   font-weight: 850;
+  box-shadow: var(--inset-shadow);
 }
 
 .message-stream {
@@ -518,17 +560,17 @@ textarea:focus,
   gap: 12px;
   padding: 18px;
   background:
-    linear-gradient(rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.74)),
-    radial-gradient(circle at 20% 0, rgba(220, 239, 233, 0.5), transparent 25%);
+    linear-gradient(180deg, rgba(251, 253, 252, 0.96), rgba(241, 246, 247, 0.92)),
+    var(--surface-soft);
 }
 
 .empty-state {
   min-height: 100%;
+  max-width: 560px;
   display: grid;
   place-items: center;
   align-content: center;
   gap: 10px;
-  max-width: 520px;
   margin: 0 auto;
   color: var(--muted);
   text-align: center;
@@ -536,7 +578,7 @@ textarea:focus,
 
 .empty-state h2 {
   color: var(--ink);
-  font-size: clamp(24px, 3vw, 34px);
+  font-size: 30px;
   line-height: 1.12;
 }
 
@@ -550,18 +592,18 @@ textarea:focus,
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: #fff;
-  box-shadow: var(--soft-shadow);
+  box-shadow: 0 10px 26px rgba(24, 39, 45, 0.08);
 }
 
 .message-card.user {
   justify-self: end;
-  border-color: rgba(15, 111, 100, 0.32);
-  background: linear-gradient(135deg, var(--primary), var(--blue));
+  border-color: rgba(11, 118, 110, 0.32);
+  background: linear-gradient(135deg, #064d49, var(--primary) 68%, #27758f);
   color: #fff;
 }
 
 .message-card.assistant {
-  border-left: 3px solid var(--primary-soft);
+  border-left: 4px solid var(--primary);
 }
 
 .message-card header {
@@ -594,6 +636,7 @@ textarea:focus,
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: #fff;
+  box-shadow: var(--inset-shadow);
 }
 
 .pipeline-step span {
@@ -614,8 +657,12 @@ textarea:focus,
 }
 
 .pipeline-step.active {
-  border-color: rgba(15, 111, 100, 0.48);
+  border-color: rgba(11, 118, 110, 0.48);
   background: var(--primary-soft);
+}
+
+.pipeline-step.active strong {
+  color: var(--primary-dark);
 }
 
 .pipeline-step.active span {
@@ -636,6 +683,7 @@ textarea:focus,
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
   background: #fff;
+  box-shadow: var(--inset-shadow);
 }
 
 .model-card dt {
@@ -645,6 +693,7 @@ textarea:focus,
 }
 
 .model-card dd {
+  min-width: 0;
   margin: 0;
   font-weight: 850;
   overflow-wrap: anywhere;
@@ -673,6 +722,7 @@ textarea:focus,
   align-content: center;
   gap: 7px;
   padding: 14px;
+  box-shadow: var(--inset-shadow), var(--soft-shadow);
 }
 
 .stat-card strong {
@@ -687,7 +737,7 @@ textarea:focus,
 }
 
 .stat-card.danger {
-  border-color: rgba(182, 58, 80, 0.28);
+  border-color: rgba(183, 51, 82, 0.3);
   background: linear-gradient(180deg, #fff, var(--danger-soft));
 }
 
@@ -696,7 +746,7 @@ textarea:focus,
 }
 
 .stat-card.warn {
-  border-color: rgba(177, 107, 24, 0.28);
+  border-color: rgba(167, 97, 20, 0.3);
   background: linear-gradient(180deg, #fff, var(--warn-soft));
 }
 
@@ -705,7 +755,7 @@ textarea:focus,
 }
 
 .stat-card.ok {
-  border-color: rgba(36, 122, 87, 0.26);
+  border-color: rgba(36, 121, 85, 0.28);
   background: linear-gradient(180deg, #fff, var(--success-soft));
 }
 
@@ -728,7 +778,7 @@ textarea:focus,
 }
 
 .priority-column {
-  border-color: rgba(212, 104, 79, 0.25);
+  border-color: rgba(200, 95, 77, 0.28);
 }
 
 .column-head {
@@ -738,7 +788,7 @@ textarea:focus,
   gap: 10px;
   padding: 14px;
   border-bottom: 1px solid var(--line);
-  background: linear-gradient(90deg, #fff, var(--surface-soft));
+  background: linear-gradient(90deg, #fff, #f5f9f8);
 }
 
 .column-head span {
@@ -759,6 +809,7 @@ textarea:focus,
   align-content: start;
   gap: 9px;
   padding: 12px;
+  background: #fbfcfc;
 }
 
 .record-card {
@@ -770,11 +821,12 @@ textarea:focus,
   background: #fff;
   color: var(--ink);
   text-align: left;
+  box-shadow: var(--inset-shadow);
 }
 
 .record-card:hover {
-  border-color: rgba(15, 111, 100, 0.42);
-  box-shadow: 0 12px 26px rgba(15, 111, 100, 0.10);
+  border-color: rgba(11, 118, 110, 0.42);
+  box-shadow: 0 14px 28px rgba(11, 118, 110, 0.1);
 }
 
 .record-card div {
@@ -853,6 +905,7 @@ textarea:focus,
   background: #fff;
   cursor: pointer;
   font-weight: 850;
+  box-shadow: var(--inset-shadow);
 }
 
 .detail-overlay {
@@ -861,7 +914,7 @@ textarea:focus,
   z-index: 20;
   display: grid;
   place-items: stretch end;
-  background: rgba(20, 34, 31, 0.34);
+  background: rgba(22, 32, 31, 0.34);
 }
 
 .detail-drawer {
@@ -871,7 +924,7 @@ textarea:focus,
   grid-template-rows: auto minmax(0, 1fr);
   overflow: hidden;
   background: rgba(255, 255, 255, 0.98);
-  box-shadow: -24px 0 64px rgba(20, 34, 31, 0.18);
+  box-shadow: -24px 0 64px rgba(22, 32, 31, 0.2);
 }
 
 .detail-drawer > header {
@@ -950,7 +1003,7 @@ textarea:focus,
 
 @media (max-width: 1180px) {
   .student-console {
-    grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+    grid-template-columns: minmax(280px, 350px) minmax(0, 1fr);
   }
 
   .agent-panel {
@@ -1006,6 +1059,18 @@ textarea:focus,
     padding: 10px;
   }
 
+  h1 {
+    font-size: 22px;
+  }
+
+  h2 {
+    font-size: 19px;
+  }
+
+  .empty-state h2 {
+    font-size: 25px;
+  }
+
   .topbar,
   .login-strip,
   .student-intake,
@@ -1051,10 +1116,6 @@ textarea:focus,
 
   .message-card {
     width: 100%;
-  }
-
-  .sample-list {
-    display: grid;
   }
 
   .record-card div {

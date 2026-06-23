@@ -18,9 +18,10 @@ import org.springframework.stereotype.Service;
 public class IntentClassifier {
 
     private static final List<String> GENERAL_TASK_WORDS = List.of(
-            "java", "python", "javascript", "代码", "编程", "程序", "算法", "数据库", "spring", "maven",
-            "前端", "后端", "项目", "接口", "bug", "报错", "作业", "论文", "翻译", "总结", "解释",
-            "怎么写", "如何", "是什么", "为什么", "给我", "帮我", "推荐", "查询", "天气", "路线"
+            "java", "python", "javascript", "code", "programming", "algorithm", "database", "spring", "maven",
+            "frontend", "backend", "project", "api", "bug", "error", "assignment", "paper", "essay",
+            "translate", "summarize", "explain", "how to", "what is", "why", "help me", "recommend",
+            "search", "weather", "route", "study plan", "revision"
     );
 
     private final AiClient aiClient;

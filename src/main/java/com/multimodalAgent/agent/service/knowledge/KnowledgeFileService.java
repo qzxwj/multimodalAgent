@@ -26,15 +26,15 @@ public class KnowledgeFileService {
     public int ingest(String filename, byte[] bytes) {
         // 文件上传入口只负责校验和抽取文本，真正切块、向量化、落库交给 KnowledgeService。
         if (bytes.length == 0) {
-            throw new IllegalArgumentException("文件内容为空");
+            throw new IllegalArgumentException("File content is empty.");
         }
         if (bytes.length > MAX_FILE_BYTES) {
-            throw new IllegalArgumentException("文件不能超过 10MB");
+            throw new IllegalArgumentException("File size must not exceed 10MB.");
         }
         String source = sanitizeSource(filename);
         String text = extractText(source, bytes);
         if (text.isBlank()) {
-            throw new IllegalArgumentException("没有从文件中解析出可用文本");
+            throw new IllegalArgumentException("No usable text could be extracted from the file.");
         }
         return knowledgeService.ingest(source, text);
     }
@@ -48,14 +48,14 @@ public class KnowledgeFileService {
         if (lower.endsWith(".md") || lower.endsWith(".markdown") || lower.endsWith(".txt")) {
             return new String(bytes, StandardCharsets.UTF_8);
         }
-        throw new IllegalArgumentException("仅支持 PDF、Markdown 和 txt 文件");
+        throw new IllegalArgumentException("Only PDF, Markdown, and TXT files are supported.");
     }
 
     private String extractPdf(byte[] bytes) {
         try (PDDocument document = Loader.loadPDF(bytes)) {
             return new PDFTextStripper().getText(document);
         } catch (Exception exception) {
-            throw new IllegalArgumentException("PDF 文本解析失败：" + exception.getMessage());
+            throw new IllegalArgumentException("Failed to extract PDF text: " + exception.getMessage());
         }
     }
 

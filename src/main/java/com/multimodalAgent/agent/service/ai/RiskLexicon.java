@@ -10,16 +10,18 @@ import java.util.List;
 public final class RiskLexicon {
 
     private static final List<String> HIGH_RISK_WORDS = List.of(
-            "不想活", "活不下去", "撑不下去", "自杀", "自残", "轻生", "结束生命", "结束这一切",
-            "伤害自己", "伤人", "杀了", "想死", "去死", "没有活着的意义", "不想存在", "消失算了",
-            "suicide", "kill myself", "self harm", "end my life", "hurt myself", "hurt others", "want to die"
+            "suicide", "kill myself", "self harm", "self-harm", "end my life", "hurt myself",
+            "hurt others", "want to die", "do not want to live", "don't want to live",
+            "cannot keep going", "can't keep going", "no reason to live", "wish i could disappear",
+            "i might hurt myself", "i might hurt someone", "immediate danger"
     );
 
     private static final List<String> CONSULT_WORDS = List.of(
-            "焦虑", "压力", "压抑", "抑郁", "低落", "失眠", "睡不着", "崩溃", "难过", "孤独",
-            "情绪", "心理", "心理咨询", "咨询师", "心累", "烦躁", "害怕", "恐惧", "内耗", "想哭",
-            "不开心", "没动力", "痛苦", "沮丧", "绝望", "无助", "喘不过气", "panic attack",
-            "anxiety", "anxious", "stress", "depress", "sad", "insomnia", "panic", "lonely", "breakup"
+            "panic attack", "anxiety", "anxious", "stress", "pressure", "overwhelmed",
+            "depress", "depressed", "low mood", "sad", "insomnia", "cannot sleep",
+            "can't sleep", "panic", "lonely", "breakup", "hopeless", "helpless",
+            "worthless", "no motivation", "burnout", "emotion", "counseling", "counsellor",
+            "counselor", "mental health", "relationship", "roommate conflict"
     );
 
     private RiskLexicon() {

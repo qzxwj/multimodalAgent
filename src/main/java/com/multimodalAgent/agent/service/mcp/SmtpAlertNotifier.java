@@ -26,19 +26,19 @@ public class SmtpAlertNotifier implements AlertNotifier {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(properties.getMcp().getEmail().getFrom());
         message.setTo(alertRecord.getRecipient());
-        message.setSubject("【高危心理预警】学生用户 %s 存在高风险信号".formatted(report.getUser().getUsername()));
+        message.setSubject("[High-Risk Mental Health Alert] Student %s needs attention".formatted(report.getUser().getUsername()));
         message.setText("""
-                系统在对话中监测到 1 名学生出现高风险心理状态，请及时关注并干预。
+                The system detected a high-risk mental-health signal in a student conversation. Please review and follow up promptly.
 
-                【预警信息如下】
-                报告ID：%s
-                用户ID：%s
-                学生：%s
-                对话内容：%s
-                情绪判定：%s
-                综合情绪得分：%.2f
-                风险等级：%s
-                判断摘要：%s
+                Alert details:
+                Report ID: %s
+                User ID: %s
+                Student: %s
+                Conversation content: %s
+                Emotion: %s
+                Emotion score: %.2f
+                Risk level: %s
+                Assessment summary: %s
 
                 """.formatted(
                 report.getId(),

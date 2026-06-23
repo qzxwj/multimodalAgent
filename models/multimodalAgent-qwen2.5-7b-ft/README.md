@@ -1,12 +1,12 @@
 # multimodalAgent-qwen2.5-7b-ft:latest
 
-这是 multimodalAgent 项目使用的本地 Ollama 模型目录。`Modelfile` 会加载本目录下的 GGUF 权重文件：
+This is the local Ollama model directory used by Chengxin AI. The `Modelfile` loads this GGUF weight file:
 
 ```text
-multimodalAgent-qwen2.5-7b-ft-q4_k_m.gguf
+mindbridge-qwen2.5-7b-ft-q4_k_m.gguf
 ```
 
-创建本地模型：
+Create the local model:
 
 ```bash
 /Applications/Ollama.app/Contents/Resources/ollama create multimodalAgent-qwen2.5-7b-ft:latest -f models/multimodalAgent-qwen2.5-7b-ft/Modelfile

@@ -63,10 +63,10 @@ public class AgenticRagService {
                 queries = List.of(userInput);
             }
             return new RagPlan(
-                    node.path("reason").asText("围绕用户当前心理支持需求检索校园心理健康知识。"),
+                    node.path("reason").asText("Search campus mental-health knowledge around the user's current support need."),
                     queries.stream().limit(MAX_QUERIES).toList());
         } catch (Exception ignored) {
-            return new RagPlan("模型规划失败，使用用户原问题直接检索。", List.of(userInput));
+            return new RagPlan("Model planning failed; search directly with the user's original input.", List.of(userInput));
         }
     }
 
@@ -76,10 +76,10 @@ public class AgenticRagService {
             JsonNode node = objectMapper.readTree(extractJson(raw));
             return new RagReview(
                     node.path("sufficient").asBoolean(false),
-                    node.path("reason").asText("证据覆盖度不足。"),
+                    node.path("reason").asText("Evidence coverage is insufficient."),
                     jsonStrings(node.path("followUpQueries")));
         } catch (Exception ignored) {
-            return new RagReview(!evidence.isEmpty(), evidence.isEmpty() ? "未找到可用证据。" : "已找到可用知识片段。", List.of(userInput));
+            return new RagReview(!evidence.isEmpty(), evidence.isEmpty() ? "No usable evidence was found." : "Usable knowledge snippets were found.", List.of(userInput));
         }
     }
 

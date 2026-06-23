@@ -74,8 +74,8 @@ public class LocalExcelReportWriter implements ExcelReportWriter {
 
     private void writeHeader(Row row) {
         String[] headers = {
-                "报告ID", "用户ID", "账号", "会话ID", "意图", "情绪标签", "情绪总分",
-                "风险等级", "置信度", "判断摘要", "多模态标签", "对话内容", "对话时间"
+                "Report ID", "User ID", "Username", "Session ID", "Intent", "Emotion", "Emotion Score",
+                "Risk Level", "Confidence", "Assessment Summary", "Multimodal Tags", "Conversation Content", "Created At"
         };
         for (int i = 0; i < headers.length; i++) {
             cell(row, i).setCellValue(headers[i]);

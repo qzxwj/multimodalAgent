@@ -1,41 +1,41 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>多模态智心 Agent</title>
-  <link rel="stylesheet" href="/styles.css?v=20260623-warm-care-ui">
+  <title>Chengxin AI</title>
+  <link rel="stylesheet" href="/styles.css?v=20260623-chenxin-taste-ui">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 </head>
 <body>
   <main class="app-shell">
     <header class="topbar">
-      <div class="identity" aria-label="多模态智心">
-        <div class="logo-mark">心</div>
+      <div class="identity" aria-label="Chengxin AI">
+        <div class="logo-mark">C</div>
         <div>
-          <p class="kicker">Campus MindCare Agent</p>
-          <h1>多模态智心</h1>
+          <p class="kicker">Campus Mental Health Assistant</p>
+          <h1>Chengxin AI</h1>
         </div>
       </div>
 
-      <div class="top-status" aria-label="系统状态">
-        <span id="serviceState" class="status-dot">连接中</span>
-        <span id="modelState" class="status-dot">模型读取中</span>
+      <div class="top-status" aria-label="System status">
+        <span id="serviceState" class="status-dot">Connecting</span>
+        <span id="modelState" class="status-dot">Loading model</span>
       </div>
 
-      <form id="loginForm" class="login-strip" aria-label="登录">
-        <input id="username" name="username" value="student" autocomplete="username" aria-label="账号">
-        <input id="password" name="password" value="student123" type="password" autocomplete="current-password" aria-label="密码">
-        <button type="submit">进入</button>
+      <form id="loginForm" class="login-strip" aria-label="Sign in">
+        <input id="username" name="username" value="student" autocomplete="username" aria-label="Username">
+        <input id="password" name="password" value="student123" type="password" autocomplete="current-password" aria-label="Password">
+        <button type="submit">Enter</button>
         <p id="loginState">student / student123</p>
       </form>
 
       <section id="accountPanel" class="account-strip" hidden>
         <div>
-          <strong id="activeAccount">已登录</strong>
-          <span id="activeRole">学生账号</span>
+          <strong id="activeAccount">Signed in</strong>
+          <span id="activeRole">Student account</span>
         </div>
-        <button id="switchAccount" type="button">切换</button>
+        <button id="switchAccount" type="button">Switch</button>
       </section>
     </header>
 
@@ -44,41 +44,41 @@
         <section class="welcome-card">
           <div class="welcome-copy">
             <p class="kicker">Private Support</p>
-            <h2>先把此刻的感受放下来</h2>
-            <p>文字、语音、图像或视频都可以。系统会先理解输入，再给出温和、可执行的陪伴与建议。</p>
+            <h2>Put this moment into words first</h2>
+            <p>Use text, audio, images, or video. The system will first understand your input, then offer calm and practical support.</p>
           </div>
-          <img src="/assets/multimodalAgent-campus-companion.png" alt="在校园心理咨询空间中记录想法的学生">
+          <img src="/assets/multimodalAgent-campus-companion.png" alt="A student writing thoughts in a campus counseling space">
         </section>
 
         <section class="glass-panel intake-card">
           <div class="section-title">
             <p class="kicker">Intake</p>
-            <h2>多模态输入</h2>
+            <h2>Multimodal input</h2>
           </div>
           <form id="chatForm" class="intake-form">
-            <textarea id="messageInput" rows="8" placeholder="写下你现在想说的话，或上传一段语音 / 图像 / 视频"></textarea>
-            <div class="sensor-grid" aria-label="附件输入">
+            <textarea id="messageInput" rows="8" placeholder="Write what you want to say, or upload an audio, image, or video file"></textarea>
+            <div class="sensor-grid" aria-label="Attachment input">
               <label class="sensor-tile">
                 <input id="audioInput" type="file" accept="audio/*">
                 <span>Whisper</span>
-                <strong>语音</strong>
+                <strong>Audio</strong>
               </label>
               <label class="sensor-tile">
                 <input id="imageInput" type="file" accept="image/*">
                 <span>MediaPipe</span>
-                <strong>图像</strong>
+                <strong>Image</strong>
               </label>
               <label class="sensor-tile">
                 <input id="videoInput" type="file" accept="video/*">
                 <span>Face Mesh</span>
-                <strong>视频</strong>
+                <strong>Video</strong>
               </label>
             </div>
-            <div id="attachmentState" class="attachment-tray">暂无附件</div>
+            <div id="attachmentState" class="attachment-tray">No attachments</div>
             <div class="form-actions">
-              <button id="clearAttachments" type="button" class="secondary" hidden>清空附件</button>
-              <button id="newSessionButton" type="button" class="secondary">新会话</button>
-              <button id="sendButton" type="submit" class="primary">发送</button>
+              <button id="clearAttachments" type="button" class="secondary" hidden>Clear files</button>
+              <button id="newSessionButton" type="button" class="secondary">New session</button>
+              <button id="sendButton" type="submit" class="primary">Send</button>
             </div>
           </form>
         </section>
@@ -86,12 +86,12 @@
         <section class="glass-panel sample-card">
           <div class="section-title">
             <p class="kicker">Quick Start</p>
-            <h2>快速开始</h2>
+            <h2>Quick start</h2>
           </div>
           <div class="sample-list">
-            <button type="button" data-prompt="我最近压力很大，晚上总是睡不着，想先把原因说清楚。">焦虑倾诉</button>
-            <button type="button" data-prompt="这周一直很低落，做什么都提不起劲。">低落陪伴</button>
-            <button type="button" data-prompt="帮我把今晚的复习任务拆成一个具体计划。">普通聊天</button>
+            <button type="button" data-prompt="I have been under a lot of pressure lately and cannot sleep at night. I want to understand what is going on.">Stress support</button>
+            <button type="button" data-prompt="I have felt low all week and cannot find motivation to do anything.">Low mood</button>
+            <button type="button" data-prompt="Help me break tonight's revision into a concrete study plan.">Study plan</button>
           </div>
         </section>
       </aside>
@@ -100,9 +100,9 @@
         <div class="stage-head">
           <div>
             <p class="kicker">Conversation</p>
-            <h2 id="profileText">学生对话</h2>
+            <h2 id="profileText">Student chat</h2>
           </div>
-          <div id="sessionBadge" class="session-chip">可开始</div>
+          <div id="sessionBadge" class="session-chip">Ready</div>
         </div>
         <div id="messages" class="message-stream" aria-live="polite"></div>
       </section>
@@ -111,19 +111,19 @@
         <section class="glass-panel pipeline-card">
           <div class="section-title">
             <p class="kicker">Agent Loop</p>
-            <h2>本轮链路</h2>
+            <h2>Agent loop</h2>
           </div>
           <div id="pipelineSteps" class="pipeline-steps"></div>
         </section>
         <section class="glass-panel model-card">
           <div class="section-title">
             <p class="kicker">Runtime</p>
-            <h2>运行环境</h2>
+            <h2>Runtime</h2>
           </div>
           <dl>
-            <div><dt>模型</dt><dd id="runtimeModel">读取中</dd></div>
-            <div><dt>向量库</dt><dd>Chroma / 本地召回</dd></div>
-            <div><dt>工具</dt><dd>Excel + 邮件预警</dd></div>
+            <div><dt>Model</dt><dd id="runtimeModel">Loading</dd></div>
+            <div><dt>Retrieval</dt><dd>Chroma / local search</dd></div>
+            <div><dt>Tools</dt><dd>Excel + alert log</dd></div>
           </dl>
         </section>
       </aside>
@@ -133,19 +133,19 @@
       <header class="admin-head">
         <div>
           <p class="kicker">Counselor Workbench</p>
-          <h2>心理中心工作台</h2>
+          <h2>Counselor workbench</h2>
         </div>
-        <button id="adminRefresh" type="button">刷新</button>
+        <button id="adminRefresh" type="button">Refresh</button>
       </header>
 
-      <section id="adminStats" class="stats-grid" aria-label="管理统计"></section>
+      <section id="adminStats" class="stats-grid" aria-label="Admin statistics"></section>
 
       <section class="admin-layout">
         <section class="admin-column priority-column">
           <div class="column-head">
             <div>
               <p class="kicker">Priority</p>
-              <h3>风险队列</h3>
+              <h3>Risk queue</h3>
             </div>
             <span id="queueCount">0</span>
           </div>
@@ -156,7 +156,7 @@
           <div class="column-head">
             <div>
               <p class="kicker">Closed Loop</p>
-              <h3>数据闭环</h3>
+              <h3>Data loop</h3>
             </div>
           </div>
           <div id="excelRows" class="record-list"></div>
@@ -166,7 +166,7 @@
           <div class="column-head">
             <div>
               <p class="kicker">Alert Delivery</p>
-              <h3>预警送达</h3>
+              <h3>Alert delivery</h3>
             </div>
           </div>
           <div id="emailRows" class="record-list"></div>
@@ -176,13 +176,13 @@
       <form id="knowledgeUploadForm" class="knowledge-bar">
         <div>
           <p class="kicker">Knowledge Base</p>
-          <strong id="knowledgeUploadState">上传 PDF / Markdown / TXT</strong>
+          <strong id="knowledgeUploadState">Upload PDF / Markdown / TXT</strong>
         </div>
         <label class="upload-button">
           <input id="knowledgeFile" type="file" accept=".pdf,.md,.markdown,.txt,application/pdf,text/markdown,text/plain">
-          <span>选择文件</span>
+          <span>Choose file</span>
         </label>
-        <button type="submit">入库</button>
+        <button type="submit">Ingest</button>
       </form>
     </section>
   </main>
@@ -191,16 +191,16 @@
     <article class="detail-drawer">
       <header>
         <div>
-          <p id="detailKicker" class="kicker">详情</p>
-          <h2 id="detailTitle">记录</h2>
+          <p id="detailKicker" class="kicker">Detail</p>
+          <h2 id="detailTitle">Record</h2>
           <p id="detailMeta"></p>
         </div>
-        <button id="closeDetail" type="button">关闭</button>
+        <button id="closeDetail" type="button">Close</button>
       </header>
       <div id="detailBody" class="detail-body"></div>
     </article>
   </section>
 
-  <script src="/app.js?v=20260623-warm-care-ui"></script>
+  <script src="/app.js?v=20260623-chenxin-english-demo"></script>
 </body>
 </html>

@@ -94,7 +94,7 @@ public class ChatService {
                 .flatMapMany(this::streamPrepared)
                 .onErrorResume(exception -> Flux.just(event(
                         "error",
-                        ChatStreamEvent.error(null, "服务暂时不可用：" + exception.getMessage()))));
+                        ChatStreamEvent.error(null, "Service is temporarily unavailable: " + exception.getMessage()))));
     }
 
     public Flux<ServerSentEvent<ChatStreamEvent>> streamMultimodal(Long userId, ChatRequest request, MultimodalAnalysis analysis) {
@@ -103,7 +103,7 @@ public class ChatService {
                 .flatMapMany(this::streamPrepared)
                 .onErrorResume(exception -> Flux.just(event(
                         "error",
-                        ChatStreamEvent.error(null, "服务暂时不可用：" + exception.getMessage()))));
+                        ChatStreamEvent.error(null, "Service is temporarily unavailable: " + exception.getMessage()))));
     }
 
     private PreparedConversation prepare(Long userId, ChatRequest request, MultimodalAnalysis multimodalAnalysis) {
@@ -165,10 +165,10 @@ public class ChatService {
                 .timeout(Duration.ofSeconds(45))
                 .onErrorResume(exception -> Flux.just(event(
                         "error",
-                        ChatStreamEvent.error(prepared.session().getPublicId(), "模型响应超时或失败，请稍后重试。"))))
+                        ChatStreamEvent.error(prepared.session().getPublicId(), "The model response timed out or failed. Please try again later."))))
                 .switchIfEmpty(Flux.just(event(
                         "error",
-                        ChatStreamEvent.error(prepared.session().getPublicId(), "模型没有返回内容，请稍后重试。"))));
+                        ChatStreamEvent.error(prepared.session().getPublicId(), "The model returned no content. Please try again later."))));
 
         Mono<ServerSentEvent<ChatStreamEvent>> done = Mono.fromCallable(() -> {
             if (!assistantReply.isEmpty()) {
@@ -213,24 +213,24 @@ public class ChatService {
     }
 
     private String multimodalMemory(MultimodalAnalysis analysis) {
-        String modalities = String.join("、", analysis.signals().stream()
+        String modalities = String.join(", ", analysis.signals().stream()
                 .map(MultimodalSignal::modality)
                 .distinct()
                 .toList());
-        String evidence = String.join("；", analysis.signals().stream()
+        String evidence = String.join("; ", analysis.signals().stream()
                 .map(signal -> signal.modality() + "=" + signal.evidence())
                 .toList());
         return """
-                【多模态分析记忆】
-                用户本轮上传了%s，后端已完成多模态情绪分析。后续如果用户追问“你是否根据图片/语音/视频分析”，应说明：我是基于后端多模态分析结果和你的文字一起判断，不是只凭文字猜测。不要否认已上传附件，也不要声称自己直接查看了原始文件。
-                分析摘要：%s
-                情绪标签：%s
-                分析证据：%s
+                [Multimodal analysis memory]
+                The user uploaded %s in this turn, and the backend has completed multimodal emotion analysis. If the user later asks whether the answer considered the image/audio/video, explain: I am using the backend multimodal analysis together with your text, not guessing from text alone. Do not deny the attachment, and do not claim to directly inspect the raw file.
+                Analysis summary: %s
+                Emotion tags: %s
+                Evidence: %s
                 """.formatted(
-                modalities.isBlank() ? "附件" : modalities,
+                modalities.isBlank() ? "attachments" : modalities,
                 analysis.summary(),
                 analysis.emotionTagsJson(),
-                evidence.isBlank() ? "无" : evidence);
+                evidence.isBlank() ? "None" : evidence);
     }
 
     private PsychologicalReport saveReport(

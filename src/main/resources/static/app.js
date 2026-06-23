@@ -54,12 +54,12 @@ const els = {
 };
 
 const pipeline = [
-  ["input", "接收输入"],
-  ["fusion", "多模态理解"],
-  ["router", "识别需求"],
-  ["rag", "检索支持"],
-  ["mcp", "记录闭环"],
-  ["stream", "生成回复"]
+  ["input", "Receive input"],
+  ["fusion", "Multimodal parsing"],
+  ["router", "Route intent"],
+  ["rag", "Retrieve support"],
+  ["mcp", "Record loop"],
+  ["stream", "Generate response"]
 ];
 
 function authHeader() {
@@ -86,12 +86,12 @@ function setService(text, value) {
 }
 
 function displayModelName(model) {
-  return (model || "").includes("multimodalAgent-qwen2.5-7b-ft") ? "微调 Qwen2.5-7B" : (model || "未知模型");
+  return (model || "").includes("multimodalAgent-qwen2.5-7b-ft") ? "Fine-tuned Qwen2.5-7B" : (model || "Unknown model");
 }
 
 function setModel(status) {
   state.modelName = status.model || state.modelName;
-  const label = status.realModelEnabled ? `${status.provider} / ${displayModelName(state.modelName)}` : "mock / 离线演示";
+  const label = status.realModelEnabled ? `${status.provider} / ${displayModelName(state.modelName)}` : "mock / offline demo";
   els.modelState.textContent = label;
   els.runtimeModel.textContent = displayModelName(state.modelName);
   tone(els.modelState, status.realModelEnabled ? "ok" : "warn");
@@ -99,9 +99,9 @@ function setModel(status) {
 
 function selectedFiles() {
   return [
-    ["audio", "语音", els.audioInput.files?.[0]],
-    ["image", "图像", els.imageInput.files?.[0]],
-    ["video", "视频", els.videoInput.files?.[0]]
+    ["audio", "Audio", els.audioInput.files?.[0]],
+    ["image", "Image", els.imageInput.files?.[0]],
+    ["video", "Video", els.videoInput.files?.[0]]
   ].filter(([, , file]) => file);
 }
 
@@ -110,7 +110,7 @@ function updateAttachments() {
   els.clearAttachments.hidden = files.length === 0;
   els.attachmentState.textContent = files.length
     ? files.map(([, label, file]) => `${label} / ${file.name}`).join("    ")
-    : "暂无附件";
+    : "No attachments";
   els.attachmentState.classList.toggle("active", files.length > 0);
 }
 
@@ -133,9 +133,9 @@ function renderPipeline(activeKey = "") {
 
 function setSession(text, value) {
   const labels = {
-    READY: "可开始",
-    RUNNING: "回应中",
-    FAILED: "需重试"
+    READY: "Ready",
+    RUNNING: "Responding",
+    FAILED: "Retry needed"
   };
   els.sessionBadge.textContent = labels[text] || text;
   tone(els.sessionBadge, value);
@@ -145,7 +145,7 @@ function addMessage(role, content = "") {
   const card = document.createElement("article");
   card.className = `message-card ${role}`;
   card.dataset.raw = content;
-  const label = role === "user" ? "你刚才说" : displayModelName(state.modelName);
+  const label = role === "user" ? "You said" : displayModelName(state.modelName);
   card.innerHTML = `<header><span>${label}</span></header><div class="message-content"></div>`;
   card.querySelector(".message-content").textContent = content;
   els.messages.append(card);
@@ -163,8 +163,8 @@ function renderEmptyConversation() {
   els.messages.innerHTML = `
     <section class="empty-state">
       <p class="kicker">Ready</p>
-      <h2>你可以从一句话开始</h2>
-      <p>这里适合梳理压力、低落、睡眠和学习安排。你也可以补充语音、图像或视频，让系统更完整地理解当前状态。</p>
+      <h2>You can start with one sentence</h2>
+      <p>This space can help you sort through stress, low mood, sleep difficulties, and study planning. You can also add audio, images, or video so the system can understand the situation more fully.</p>
     </section>
   `;
 }
@@ -207,7 +207,7 @@ async function sendChat(event) {
   renderPipeline("input");
 
   const visibleInput = [
-    message || "学生上传了多模态内容",
+    message || "The student uploaded multimodal content",
     ...files.map(([, label, file]) => `${label}: ${file.name}`)
   ].join("\n");
   addMessage("user", visibleInput);
@@ -236,19 +236,19 @@ async function sendChat(event) {
           renderPipeline("stream");
         }
         if (eventData.type === "error") {
-          output = eventData.content || "模型暂时没有返回内容。";
+          output = eventData.content || "The model did not return content yet.";
           updateAssistant(assistant, output);
           renderPipeline("stream");
         }
       });
     }
 
-    if (!output) updateAssistant(assistant, "模型暂时没有返回内容。");
+    if (!output) updateAssistant(assistant, "The model did not return content yet.");
     renderPipeline("mcp");
     setTimeout(() => renderPipeline("stream"), 280);
     setSession("READY", "ok");
   } catch (error) {
-    updateAssistant(assistant, "请求失败，请确认后端和 Ollama 已启动。");
+    updateAssistant(assistant, "Request failed. Please make sure the backend service is running.");
     setSession("FAILED", "danger");
   } finally {
     state.sending = false;
@@ -268,7 +268,7 @@ function sendText(message) {
 
 function sendMultimodal(message, files) {
   const body = new FormData();
-  body.append("message", message || "学生上传了多模态内容，希望获得支持。");
+  body.append("message", message || "The student uploaded multimodal content and would like support.");
   if (state.sessionId) body.append("sessionId", state.sessionId);
   files.forEach(([key, , file]) => body.append(key, file));
   return api("/api/chat/multimodal/stream", { method: "POST", body });
@@ -299,11 +299,11 @@ function renderAdminStats(reports, excelRecords, alerts) {
   const mailFailed = alerts.filter((item) => item.status === "FAILED").length;
   els.queueCount.textContent = high;
   els.adminStats.append(
-    statCard("报告总数", reports.length),
-    statCard("高风险", high, "danger"),
-    statCard("需关注", medium, "warn"),
-    statCard("邮件失败", mailFailed, mailFailed ? "danger" : "ok"),
-    statCard("Excel 写入", excelRecords.length, "ok")
+    statCard("Total reports", reports.length),
+    statCard("High risk", high, "danger"),
+    statCard("Needs attention", medium, "warn"),
+    statCard("Alert failures", mailFailed, mailFailed ? "danger" : "ok"),
+    statCard("Excel records", excelRecords.length, "ok")
   );
 }
 
@@ -321,7 +321,7 @@ function recordButton(title, badge, meta, summary, onClick) {
   button.innerHTML = `
     <div><strong>${escapeHtml(title)}</strong><span class="${riskTone(badge)}">${escapeHtml(badge || "SKIPPED")}</span></div>
     <small>${escapeHtml(meta || "")}</small>
-    <p>${escapeHtml(summary || "无摘要")}</p>
+    <p>${escapeHtml(summary || "No summary")}</p>
   `;
   button.addEventListener("click", onClick);
   return button;
@@ -339,7 +339,7 @@ function escapeHtml(value) {
 function renderReportRows(reports) {
   els.adminReportRows.innerHTML = "";
   if (!reports.length) {
-    els.adminReportRows.append(emptyRecord("暂无风险记录"));
+    els.adminReportRows.append(emptyRecord("No risk records"));
     return;
   }
   reports.slice(0, 24).forEach((item) => {
@@ -348,7 +348,7 @@ function renderReportRows(reports) {
       item.riskLevel,
       `${item.intent} · ${formatDate(item.createdAt)}`,
       item.summary,
-      () => item.sessionId ? openConversation(item) : openRecord("报告详情", item)
+      () => item.sessionId ? openConversation(item) : openRecord("Report detail", item)
     ));
   });
 }
@@ -356,7 +356,7 @@ function renderReportRows(reports) {
 function renderExcelRows(records) {
   els.excelRows.innerHTML = "";
   if (!records.length) {
-    els.excelRows.append(emptyRecord("暂无 Excel 记录"));
+    els.excelRows.append(emptyRecord("No Excel records"));
     return;
   }
   records.slice(0, 24).forEach((item) => {
@@ -365,7 +365,7 @@ function renderExcelRows(records) {
       item.excelStatus,
       `${item.emotion} · ${item.riskLevel} · ${formatDate(item.createdAt)}`,
       item.summary || item.content,
-      () => openRecord("Excel 写入", item)
+      () => openRecord("Excel record", item)
     ));
   });
 }
@@ -373,16 +373,16 @@ function renderExcelRows(records) {
 function renderEmailRows(records) {
   els.emailRows.innerHTML = "";
   if (!records.length) {
-    els.emailRows.append(emptyRecord("暂无预警邮件"));
+    els.emailRows.append(emptyRecord("No alert records"));
     return;
   }
   records.slice(0, 24).forEach((item) => {
     els.emailRows.append(recordButton(
       `#${item.reportId} / ${item.recipient}`,
       item.status,
-      `${item.riskLevel} · ${item.attempts} 次 · ${formatDate(item.updatedAt)}`,
+      `${item.riskLevel} · ${item.attempts} attempts · ${formatDate(item.updatedAt)}`,
       item.errorMessage || item.summary,
-      () => openRecord("邮件预警", item)
+      () => openRecord("Alert delivery", item)
     ));
   });
 }
@@ -390,13 +390,13 @@ function renderEmailRows(records) {
 function detailRow(label, value) {
   const row = document.createElement("div");
   row.className = "detail-row";
-  row.innerHTML = `<span>${escapeHtml(label)}</span><strong>${escapeHtml(value ?? "无")}</strong>`;
+  row.innerHTML = `<span>${escapeHtml(label)}</span><strong>${escapeHtml(value ?? "N/A")}</strong>`;
   return row;
 }
 
 function openRecord(title, record) {
   els.detailOverlay.hidden = false;
-  els.detailKicker.textContent = "记录详情";
+  els.detailKicker.textContent = "Record detail";
   els.detailTitle.textContent = title;
   els.detailMeta.textContent = formatDate(record.createdAt || record.updatedAt);
   els.detailBody.innerHTML = "";
@@ -410,9 +410,9 @@ function openRecord(title, record) {
 async function openConversation(report) {
   els.detailOverlay.hidden = false;
   els.detailKicker.textContent = `${report.username} / ${report.sessionId}`;
-  els.detailTitle.textContent = "完整对话";
-  els.detailMeta.textContent = "管理员视图";
-  els.detailBody.innerHTML = `<p class="empty-record">读取中...</p>`;
+  els.detailTitle.textContent = "Full conversation";
+  els.detailMeta.textContent = "Counselor view";
+  els.detailBody.innerHTML = `<p class="empty-record">Loading...</p>`;
   try {
     const response = await api(`/api/admin/conversations/${encodeURIComponent(report.sessionId)}`);
     const data = await response.json();
@@ -424,7 +424,7 @@ async function openConversation(report) {
       els.detailBody.append(card);
     });
   } catch (error) {
-    els.detailBody.innerHTML = `<p class="empty-record">读取失败</p>`;
+    els.detailBody.innerHTML = `<p class="empty-record">Failed to load</p>`;
   }
 }
 
@@ -464,19 +464,19 @@ async function uploadKnowledge(event) {
   event.preventDefault();
   const file = els.knowledgeFile.files?.[0];
   if (!file) {
-    els.knowledgeUploadState.textContent = "请选择文件";
+    els.knowledgeUploadState.textContent = "Please choose a file";
     return;
   }
   const body = new FormData();
   body.append("file", file);
-  els.knowledgeUploadState.textContent = "入库中";
+  els.knowledgeUploadState.textContent = "Ingesting";
   try {
     const response = await api("/api/admin/knowledge/file", { method: "POST", body });
     const data = await response.json();
-    els.knowledgeUploadState.textContent = `${data.source} / ${data.chunks} 个片段`;
+    els.knowledgeUploadState.textContent = `${data.source} / ${data.chunks} chunks`;
     els.knowledgeFile.value = "";
   } catch (error) {
-    els.knowledgeUploadState.textContent = "入库失败";
+    els.knowledgeUploadState.textContent = "Ingestion failed";
   }
 }
 
@@ -502,7 +502,7 @@ async function loadProfile() {
   els.loginForm.hidden = true;
   els.accountPanel.hidden = false;
   els.activeAccount.textContent = accountName;
-  els.activeRole.textContent = state.isAdmin ? "心理中心账号" : "学生账号";
+  els.activeRole.textContent = state.isAdmin ? "Counselor account" : "Student account";
 
   if (state.isAdmin) {
     els.studentView.hidden = true;
@@ -513,7 +513,7 @@ async function loadProfile() {
     els.adminView.hidden = true;
     els.profileText.textContent = profile.username;
   }
-  els.loginState.textContent = "登录成功";
+  els.loginState.textContent = "Signed in";
 }
 
 async function loadAgentStatus() {
@@ -525,9 +525,9 @@ async function checkHealth() {
   try {
     const response = await fetch("/actuator/health");
     const body = await response.json();
-    setService(body.status === "UP" ? "服务正常" : `服务 ${body.status}`, body.status === "UP" ? "ok" : "warn");
+    setService(body.status === "UP" ? "Service online" : `Service ${body.status}`, body.status === "UP" ? "ok" : "warn");
   } catch (error) {
-    setService("服务不可用", "danger");
+    setService("Service unavailable", "danger");
   }
 }
 
@@ -540,7 +540,7 @@ async function login(event) {
     await loadAgentStatus();
   } catch (error) {
     showLoggedOut();
-    els.loginState.textContent = "账号或密码错误";
+    els.loginState.textContent = "Invalid username or password";
   }
 }
 

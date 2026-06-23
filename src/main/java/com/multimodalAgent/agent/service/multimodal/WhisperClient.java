@@ -56,15 +56,15 @@ public class WhisperClient {
 
     private String mockTranscript(FilePart audio) {
         String filename = audio == null ? "" : audio.filename().toLowerCase();
-        if (filename.contains("risk") || filename.contains("crisis") || filename.contains("崩溃")) {
-            return "语音转写提示：我感觉自己快撑不下去了。";
+        if (filename.contains("risk") || filename.contains("crisis")) {
+            return "Mock audio transcript: I feel like I cannot keep going.";
         }
-        if (filename.contains("sad") || filename.contains("depress") || filename.contains("低落")) {
-            return "语音转写提示：我最近情绪很低落。";
+        if (filename.contains("sad") || filename.contains("depress")) {
+            return "Mock audio transcript: I have been feeling very low recently.";
         }
-        if (filename.contains("anxious") || filename.contains("stress") || filename.contains("焦虑")) {
-            return "语音转写提示：我最近有些焦虑，睡眠也不太好。";
+        if (filename.contains("anxious") || filename.contains("stress")) {
+            return "Mock audio transcript: I have been anxious recently, and my sleep has not been good.";
         }
-        return "语音转写提示：学生上传了一段语音，希望继续心理支持对话。";
+        return "Mock audio transcript: The student uploaded an audio file and would like to continue the support conversation.";
     }
 }

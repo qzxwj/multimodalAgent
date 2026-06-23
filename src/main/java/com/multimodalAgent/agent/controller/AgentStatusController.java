@@ -32,7 +32,7 @@ public class AgentStatusController {
                 realModelEnabled,
                 properties.getKnowledge().isUseChroma(),
                 properties.getKnowledge().getTopK(),
-                realModelEnabled ? "正在使用真实大模型客户端。" : "当前为本地 mock 演示模式，不会调用大模型。"
+                realModelEnabled ? "A real model client is enabled." : "Local mock demo mode is enabled; no large model will be called."
         );
     }
 

@@ -18,17 +18,17 @@ public class HeuristicAiClient implements AiClient {
                 .map(AiMessage::content)
                 .reduce("", (left, right) -> left + "\n" + right);
         String input = lastUserMessage(messages);
-        if (prompt.contains("intent classifier") || prompt.contains("意图分类器")) {
+        if (prompt.contains("intent classifier")) {
             return classify(input);
         }
-        if (prompt.contains("strict JSON") || prompt.contains("严格 JSON") || prompt.contains("\"emotion\"")) {
+        if (prompt.contains("strict JSON") || prompt.contains("\"emotion\"")) {
             return analyze(input);
         }
         if (prompt.contains("Agentic RAG planner")) {
-            return "{\"reason\":\"围绕学生当前困扰、校园心理支持和安全边界进行检索\",\"queries\":[\"校园心理咨询 焦虑 压力 支持建议\",\"学生 情绪困扰 应对方法\",\"高校心理危机 安全处理 流程\"]}";
+            return "{\"reason\":\"Search for the student's current concern, campus support guidance, and safety boundaries.\",\"queries\":[\"campus counseling anxiety stress coping\", \"student emotional distress support\", \"campus mental health crisis safety policy\"]}";
         }
         if (prompt.contains("Agentic RAG evidence reviewer")) {
-            return "{\"sufficient\":true,\"reason\":\"候选证据可以支持安全、通用的心理支持回答\",\"followUpQueries\":[]}";
+            return "{\"sufficient\":true,\"reason\":\"The evidence can support a safe and general mental-health response.\",\"followUpQueries\":[]}";
         }
         return answer(input, prompt);
     }
@@ -56,74 +56,74 @@ public class HeuristicAiClient implements AiClient {
         String normalized = input.toLowerCase(Locale.ROOT);
         String current = currentInput(input).toLowerCase(Locale.ROOT);
         if (RiskLexicon.hasHighRiskSignal(current)) {
-            return "{\"emotion\":\"HIGH_RISK\",\"emotionScore\":4.0,\"risk\":\"HIGH\",\"confidence\":0.92,\"summary\":\"检测到明确的高风险自伤或危险信号\"}";
+            return "{\"emotion\":\"HIGH_RISK\",\"emotionScore\":4.0,\"risk\":\"HIGH\",\"confidence\":0.92,\"summary\":\"Explicit self-harm or immediate danger signal detected.\"}";
         }
-        if (containsAny(current, "抑郁", "低落", "压抑", "崩溃", "难过", "绝望", "depress", "hopeless")) {
-            return "{\"emotion\":\"DEPRESSED\",\"emotionScore\":3.2,\"risk\":\"MEDIUM\",\"confidence\":0.82,\"summary\":\"检测到持续低落或压抑相关表达\"}";
+        if (containsAny(current, "depress", "depressed", "hopeless", "low mood", "worthless", "empty", "break down", "cry")) {
+            return "{\"emotion\":\"DEPRESSED\",\"emotionScore\":3.2,\"risk\":\"MEDIUM\",\"confidence\":0.82,\"summary\":\"Persistent low mood or depressive expression detected.\"}";
         }
-        if (containsAny(current, "焦虑", "压力", "睡不着", "失眠", "紧张", "anxious", "stress", "insomnia")) {
-            return "{\"emotion\":\"ANXIETY\",\"emotionScore\":2.2,\"risk\":\"LOW\",\"confidence\":0.78,\"summary\":\"检测到焦虑、压力或睡眠困扰相关表达\"}";
+        if (containsAny(current, "anxious", "anxiety", "stress", "pressure", "insomnia", "cannot sleep", "nervous", "overwhelmed")) {
+            return "{\"emotion\":\"ANXIETY\",\"emotionScore\":2.2,\"risk\":\"LOW\",\"confidence\":0.78,\"summary\":\"Anxiety, pressure, or sleep difficulty detected.\"}";
         }
         if (RiskLexicon.hasConsultSignal(normalized)) {
-            return "{\"emotion\":\"ANXIETY\",\"emotionScore\":2.0,\"risk\":\"LOW\",\"confidence\":0.70,\"summary\":\"结合上下文检测到心理咨询延续表达\"}";
+            return "{\"emotion\":\"ANXIETY\",\"emotionScore\":2.0,\"risk\":\"LOW\",\"confidence\":0.70,\"summary\":\"Ongoing emotional support context detected.\"}";
         }
-        return "{\"emotion\":\"NORMAL\",\"emotionScore\":0.0,\"risk\":\"LOW\",\"confidence\":0.70,\"summary\":\"未检测到明显心理风险信号\"}";
+        return "{\"emotion\":\"NORMAL\",\"emotionScore\":0.0,\"risk\":\"LOW\",\"confidence\":0.70,\"summary\":\"No obvious psychological risk signal detected.\"}";
     }
 
     private String answer(String input, String prompt) {
         String normalized = input.toLowerCase(Locale.ROOT);
         if (RiskLexicon.hasHighRiskSignal(normalized)) {
             return """
-                    我会认真对待你刚才说的这些话。现在最重要的不是把问题讲清楚，而是先确保你此刻是安全的。
+                    I am taking what you said seriously. The most important thing right now is not to explain everything perfectly, but to make sure you are safe in this moment.
 
-                    请你先做三件事：第一，离开任何可能让你伤害自己或他人的物品和环境；第二，马上联系一个现实中能到你身边的人，比如同学、室友、家人、辅导员或学校心理中心；第三，如果你已经处在马上会伤害自己或他人的危险里，请立刻拨打当地紧急救助电话。
+                    Please do three things first: move away from anything you could use to hurt yourself or someone else; contact a real person who can be with you now, such as a classmate, roommate, family member, counselor, or the campus counseling center; and if you are in immediate danger, call local emergency services now.
 
-                    你不用一个人扛完这一刻。你可以先回复我一个很短的答案：你现在是一个人吗？身边有没有一个可以立刻联系到的人？
+                    You do not have to carry this moment alone. You can reply with a very short answer first: are you alone right now, and is there someone you can contact immediately?
                     """;
         }
-        if (RiskLexicon.hasConsultSignal(normalized) || prompt.contains("检索知识：")) {
+        if (RiskLexicon.hasConsultSignal(normalized) || prompt.contains("Retrieved knowledge:")) {
             return consultAnswer(input);
         }
         return """
-                我在。你可以把我当作一个校园心理支持助手来用：日常闲聊我会自然回应；如果你聊到压力、焦虑、睡眠、人际关系或学习困扰，我会先判断意图，再结合最近上下文和知识库给你更具体的建议。
+                I am here. You can use me as a campus mental-health support assistant: I can respond naturally to everyday conversation, and when you talk about stress, anxiety, sleep, relationships, or study difficulties, I will route the need and provide more specific support.
 
-                你现在想聊轻松一点的内容，还是想说说最近真正让你卡住的一件事？
+                Would you like to keep it light for now, or talk about one specific thing that has been making life feel stuck recently?
                 """;
     }
 
     private String consultAnswer(String input) {
         String focus = focusFrom(input);
         return """
-                我能感觉到这件事已经占用了你不少精力。先不用急着把它归结成“我是不是不行”，我们可以先把它拆小一点看：%s。
+                I can tell this has been taking up a lot of your energy. You do not need to turn it into "something is wrong with me." We can first break it into a smaller, more manageable part: %s.
 
-                你现在可以先做几件很具体的小事：
-                1. 用一两句话写下最困扰你的触发点，尽量区分“发生了什么”和“我脑子里正在担心什么”。
-                2. 给身体一个短暂停顿：慢慢呼气 6 秒、吸气 4 秒，重复 3 轮，先把紧绷感降一点。
-                3. 今天只选一个能完成的小动作，比如给老师/同学发一条确认信息、洗个热水澡、或提前 20 分钟放下手机。
-                4. 如果这种状态已经持续两周以上，或明显影响上课、睡眠、饮食，建议尽快联系学校心理中心或辅导员。
+                Here are a few concrete steps you can try now:
+                1. Write down the main trigger in one or two sentences, separating "what happened" from "what I am afraid might happen."
+                2. Give your body a short pause: breathe out slowly for 6 seconds, breathe in for 4 seconds, and repeat this for 3 rounds.
+                3. Choose one small action for today, such as sending one confirmation message, taking a warm shower, or putting your phone away 20 minutes earlier.
+                4. If this has lasted for more than two weeks or is clearly affecting class, sleep, or eating, please contact the campus counseling center or a counselor soon.
 
-                我们可以继续从最具体的地方开始。这个困扰最明显是在什么时候出现的？
+                We can continue from the most specific part. When does this difficulty show up most strongly?
                 """.formatted(focus);
     }
 
     private String focusFrom(String input) {
         String normalized = input.toLowerCase(Locale.ROOT);
-        if (containsAny(normalized, "睡不着", "失眠", "睡眠", "insomnia")) {
-            return "你提到的睡眠问题可能正在放大白天的疲惫和焦虑";
+        if (containsAny(normalized, "insomnia", "cannot sleep", "sleep", "sleepless")) {
+            return "the sleep difficulty you mentioned may be amplifying daytime fatigue and anxiety";
         }
-        if (containsAny(normalized, "考试", "考研", "学习", "挂科", "作业", "论文")) {
-            return "你面对的学习或考试压力需要被拆成可处理的任务，而不是一次性压在心里";
+        if (containsAny(normalized, "exam", "study", "assignment", "paper", "revision", "coursework", "fail")) {
+            return "the study or exam pressure needs to be broken into tasks you can handle, instead of staying as one heavy weight";
         }
-        if (containsAny(normalized, "分手", "恋爱", "亲密关系", "关系", "室友", "朋友", "社交")) {
-            return "关系里的不确定和消耗很容易让人反复想、反复内耗";
+        if (containsAny(normalized, "breakup", "relationship", "roommate", "friend", "social", "conflict")) {
+            return "uncertainty and tension in relationships can easily lead to repeated overthinking";
         }
-        if (containsAny(normalized, "低落", "抑郁", "难过", "没动力", "想哭", "压抑")) {
-            return "你现在的低落感值得被认真看见，而不是被简单劝成“想开点”";
+        if (containsAny(normalized, "low mood", "depressed", "sad", "no motivation", "cry", "empty")) {
+            return "the low mood you are experiencing deserves to be taken seriously, not dismissed";
         }
-        if (containsAny(normalized, "焦虑", "紧张", "害怕", "恐惧", "压力", "烦躁")) {
-            return "你身体和脑子都像是在持续警觉，所以会很累";
+        if (containsAny(normalized, "anxious", "nervous", "afraid", "stress", "pressure", "overwhelmed")) {
+            return "your body and mind seem to be staying on alert, which can feel exhausting";
         }
-        return "先抓住一个最让你难受的场景，比泛泛地处理全部情绪更容易开始";
+        return "starting with one concrete scene is easier than trying to solve every feeling at once";
     }
 
     private String lastUserMessage(List<AiMessage> messages) {
@@ -137,7 +137,7 @@ public class HeuristicAiClient implements AiClient {
     }
 
     private String currentInput(String input) {
-        String marker = "当前输入：";
+        String marker = "Current input:";
         int index = input.lastIndexOf(marker);
         if (index < 0) {
             return input;

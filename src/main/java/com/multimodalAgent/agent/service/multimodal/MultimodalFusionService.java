@@ -32,7 +32,7 @@ public class MultimodalFusionService {
                     RiskLevel.LOW,
                     0.6,
                     "No multimodal signal.");
-            return new MultimodalAnalysis(userText, userText, assessment, signals, "无多模态附件。", "[]");
+            return new MultimodalAnalysis(userText, userText, assessment, signals, "No multimodal attachment.", "[]");
         }
 
         double fusedScore = signals.stream()
@@ -49,12 +49,12 @@ public class MultimodalFusionService {
             fusedScore = Math.max(fusedScore, 4.0);
         }
 
-        String summary = "多模态融合：" + signals.stream()
+        String summary = "Multimodal fusion: " + signals.stream()
                 .map(signal -> signal.modality() + "=" + signal.emotion() + "(" + String.format("%.1f", signal.score()) + ")")
-                .reduce((left, right) -> left + "，" + right)
-                .orElse("无")
-                + "，加权分数=" + String.format("%.2f", fusedScore)
-                + "，风险=" + risk + "。";
+                .reduce((left, right) -> left + ", " + right)
+                .orElse("none")
+                + ", weightedScore=" + String.format("%.2f", fusedScore)
+                + ", risk=" + risk + ".";
         String tagsJson = tagsJson(signals, fusedScore, risk);
         PsychologyAssessment assessment = new PsychologyAssessment(
                 emotion,
@@ -67,12 +67,12 @@ public class MultimodalFusionService {
     }
 
     private String enrichForModel(String userText, String summary, List<MultimodalSignal> signals) {
-        String text = userText == null || userText.isBlank() ? "学生上传了多模态内容，希望获得支持。" : userText;
+        String text = userText == null || userText.isBlank() ? "The student uploaded multimodal content and would like support." : userText;
         String evidence = signals.stream()
                 .map(signal -> "- " + signal.modality() + ": " + signal.evidence())
                 .reduce((left, right) -> left + "\n" + right)
                 .orElse("");
-        return text + "\n\n[多模态后台分析]\n" + summary + "\n" + evidence;
+        return text + "\n\n[Background multimodal analysis]\n" + summary + "\n" + evidence;
     }
 
     private double weight(String modality) {

@@ -59,7 +59,7 @@ public class KnowledgeController {
             dataBuffer.asInputStream().transferTo(output);
             return output.toByteArray();
         } catch (IOException exception) {
-            throw new IllegalArgumentException("文件读取失败：" + exception.getMessage());
+            throw new IllegalArgumentException("Failed to read file: " + exception.getMessage());
         } finally {
             DataBufferUtils.release(dataBuffer);
         }

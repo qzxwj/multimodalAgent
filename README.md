@@ -1,55 +1,56 @@
-# multimodalAgent Agent
+# Chengxin AI Agent
 
-multimodalAgent 是一个校园心理健康智能体
+Chengxin AI is a campus mental-health companion system for student support, counselor follow-up, and local demonstration of a multimodal AI workflow.
 
-- 动态路由 RAG：先识别 `CHAT / CONSULT / RISK`，闲聊不查知识库，咨询与风险消息才进入检索增强。
-- SSE 流式输出：`/api/chat/stream` 返回 `text/event-stream`，适合前端做打字机效果。
-- 后台心理状态识别：记录情绪标签、情绪分数、风险等级和置信度，但学生端不展示评估结果。
-- 数据闭环：咨询/风险消息写入数据库，高风险先写 Excel，再触发邮件或 HTTP MCP 预警。
-- Spring AI 模型接入：默认通过 `ollama` 调用项目模型，也可切到 `openai`；`mock` 只作为无模型离线演示。
-- 可替换知识库：默认本地轻量检索，可打开 Chroma 镜像和查询。
+- Dynamic intent routing: classifies each message as `CHAT`, `CONSULT`, or `RISK`; ordinary chat avoids RAG, while counseling and risk messages enter retrieval-augmented support.
+- SSE streaming chat: `/api/chat/stream` returns `text/event-stream` so the frontend can render a live companion-style response.
+- Background mental-state assessment: records emotion labels, emotion scores, risk levels, and confidence for counselor review without exposing the assessment directly to students.
+- Closed-loop risk workflow: counseling and risk messages are stored in the database; high-risk reports are written to Excel first, then trigger counselor alerts through log, SMTP, HTTP, or MCP-style tools.
+- Spring AI model integration: the default route uses Ollama with the project model; `openai` is also supported; `mock` is available for offline demos without a large model.
+- Replaceable knowledge base: local lightweight retrieval is enabled by default, with optional Chroma mirroring and querying.
 
-大模型 LoRA 微调、合并、GGUF 转换和 Ollama 接入流程见：[docs/qwen25-7b-lora-finetune-guide.md](docs/qwen25-7b-lora-finetune-guide.md)。
+The LoRA fine-tuning, GGUF conversion, and Ollama import workflow is documented in [docs/qwen25-7b-lora-finetune-guide.md](docs/qwen25-7b-lora-finetune-guide.md).
 
-## 目录
+## Project Structure
 
 ```text
 src/main/java/com/multimodalAgent/agent
-├── config                 # 配置、安全、AI/MCP Bean
-├── controller             # Chat / Knowledge / Report API
-├── domain                 # JPA 实体与枚举
-├── dto                    # 请求与响应对象
-├── repository             # Spring Data JPA
-├── security               # 当前用户与认证查询
+├── config                 # Configuration, security, AI and MCP beans
+├── controller             # Chat, knowledge, report and status APIs
+├── domain                 # JPA entities and enums
+├── dto                    # Request and response objects
+├── repository             # Spring Data JPA repositories
+├── security               # Current user model and authentication lookup
 └── service
-    ├── ai                 # Spring AI 模型适配器、mock 客户端与 Prompt
-    ├── knowledge          # 切块、检索、Chroma 网关
-    └── mcp                # Excel 与邮件/HTTP 预警工具
+    ├── ai                 # Spring AI adapter, mock client and prompts
+    ├── knowledge          # Chunking, retrieval and Chroma gateway
+    ├── mcp                # Excel and alert delivery tools
+    └── multimodal         # Text, audio, image/video analysis and fusion
 ```
 
-## 快速启动
+## Quick Start
 
-当前目录已经本地安装好 JDK 17 和 Maven，Ollama 也可以通过脚本自动启动。最省事的方式是直接运行：
+This workspace already includes a local JDK 17 and Maven setup. Ollama can be started by the project scripts when the local model is available.
 
 ```bash
 cd multimodalAgent
 ./scripts/run-dev.sh
 ```
 
-启动后打开：
+Open the application after startup:
 
 ```text
 http://localhost:8080
 ```
 
-如果想手动分两步启动，先在一个终端启动 Ollama：
+For a two-step manual launch, start Ollama first:
 
 ```bash
 cd multimodalAgent
 ./scripts/start-ollama.sh
 ```
 
-再在另一个终端运行项目：
+Then start the Spring Boot backend:
 
 ```bash
 cd multimodalAgent
@@ -57,7 +58,7 @@ JAVA_HOME="$PWD/.tools/amazon-corretto-17.jdk/Contents/Home" \
   .tools/apache-maven-3.9.9/bin/mvn -Dmaven.repo.local=.m2/repository spring-boot:run
 ```
 
-也可以运行已经打好的 jar：
+You can also run the packaged jar:
 
 ```bash
 cd multimodalAgent
@@ -66,92 +67,117 @@ JAVA_HOME="$PWD/.tools/amazon-corretto-17.jdk/Contents/Home" \
   -jar target/multimodalAgent-agent-0.1.0.jar --server.address=127.0.0.1 --server.port=8080
 ```
 
-默认使用 H2 文件数据库、Ollama 大模型、本地 Excel 文件和日志预警。页面左上角会显示当前模型模式；如果本机没有启动 Ollama，聊天接口会提示模型连接失败。首次启动会创建两个账号：
+By default, the project uses an H2 file database, Ollama as the model provider, a local Excel file, and log-based alerts. The frontend status area shows whether the current runtime is a real model or mock mode. On first startup, the system creates two demo accounts:
 
 ```text
 admin / admin123
 student / student123
 ```
 
-## 调用示例
+## Offline Demo Mode
+
+Use mock mode when the large local model is not available or when you need a stable classroom demo:
+
+```bash
+cd multimodalAgent
+AI_PROVIDER=mock \
+USE_CHROMA=false \
+MCP_EXCEL_MODE=local \
+MCP_EMAIL_MODE=log \
+MANAGEMENT_HEALTH_REDIS_ENABLED=false \
+JAVA_HOME="$PWD/.tools/amazon-corretto-17.jdk/Contents/Home" \
+  .tools/apache-maven-3.9.9/bin/mvn -Dmaven.repo.local=.m2/repository spring-boot:run
+```
+
+For a clean English demo database and report file, run with separate local paths:
+
+```bash
+DB_URL='jdbc:h2:file:./data/multimodalAgent-en;MODE=MySQL;DATABASE_TO_LOWER=TRUE' \
+MCP_EXCEL_LOCAL_PATH=./data/multimodalAgent-en-reports.xlsx
+```
+
+## API Examples
+
+Student support conversation:
 
 ```bash
 curl -N -u student:student123 \
   -H 'Content-Type: application/json' \
-  -d '{"message":"我最近很焦虑，晚上总是睡不着"}' \
+  -d '{"message":"I have been under a lot of pressure lately and cannot sleep at night."}' \
   http://localhost:8080/api/chat/stream
 ```
 
-高风险示例会触发报告、Excel 写入和预警：
+High-risk example, which triggers report generation, Excel writing, and alert delivery:
 
 ```bash
 curl -N -u student:student123 \
   -H 'Content-Type: application/json' \
-  -d '{"message":"我不想活了，感觉撑不下去了"}' \
+  -d '{"message":"I feel hopeless and I cannot keep going."}' \
   http://localhost:8080/api/chat/stream
 ```
 
-管理员查看后台报告：
+Counselor report list:
 
 ```bash
 curl -u admin:admin123 http://localhost:8080/api/admin/reports
 ```
 
-查看当前是否接入真实大模型：
+Current model and runtime status:
 
 ```bash
 curl -u student:student123 http://localhost:8080/api/agent/status
 ```
 
-管理员追加知识库：
+Add knowledge as an administrator:
 
 ```bash
 curl -u admin:admin123 \
   -H 'Content-Type: application/json' \
-  -d '{"source":"sleep-guide","content":"失眠时可先固定起床时间，减少睡前屏幕刺激，必要时联系校心理中心。"}' \
+  -d '{"source":"sleep-guide","content":"For insomnia, students can keep a fixed wake-up time, reduce screen exposure before bed, and contact the campus counseling center if sleep problems persist."}' \
   http://localhost:8080/api/admin/knowledge
 ```
 
-## 接入 Ollama / LoRA 模型
+## Local RAG Knowledge Base
 
-默认模型配置就是本地 Ollama 路线，模型名为：
+Bundled knowledge files live in:
+
+```text
+src/main/resources/knowledge/
+```
+
+On first startup, if the database has no knowledge chunks, the application imports every file under that folder. If an existing H2 database already contains knowledge chunks, editing these Markdown files will not automatically overwrite the stored chunks. Use a fresh `DB_URL`, clear the knowledge table, or upload a revised file through the admin knowledge endpoint when you need the updated content to take effect.
+
+## Ollama and LoRA Model
+
+The default local model name is:
 
 ```text
 multimodalAgent-qwen2.5-7b-ft:latest
 ```
 
-本地模型由这个 GGUF 权重创建：
+It is created from this GGUF weight file:
 
 ```text
 models/multimodalAgent-qwen2.5-7b-ft/multimodalAgent-qwen2.5-7b-ft-q4_k_m.gguf
 ```
 
-首次运行或重新导入模型时执行：
+Create or re-import the local Ollama model:
 
 ```bash
 cd multimodalAgent
 ./scripts/create-finetuned-model.sh
 ```
 
-之后直接启动项目：
+Then start the application:
 
 ```bash
 cd multimodalAgent
 ./scripts/run-dev.sh
 ```
 
-如果终端提示 `ollama: command not found`，说明只是命令链接没建好；本项目脚本会直接调用 `/Applications/Ollama.app/Contents/Resources/ollama`。
+If the terminal reports `ollama: command not found`, the command-line link is missing. The project scripts can still call `/Applications/Ollama.app/Contents/Resources/ollama` directly.
 
-没有本地模型、只想离线演示完整业务流程时，才使用 mock：
-
-```bash
-cd multimodalAgent
-AI_PROVIDER=mock \
-JAVA_HOME="$PWD/.tools/amazon-corretto-17.jdk/Contents/Home" \
-  .tools/apache-maven-3.9.9/bin/mvn -Dmaven.repo.local=.m2/repository spring-boot:run
-```
-
-也可以不用脚本，手动指定本地模型启动：
+Manual Ollama startup:
 
 ```bash
 cd multimodalAgent
@@ -162,30 +188,30 @@ JAVA_HOME="$PWD/.tools/amazon-corretto-17.jdk/Contents/Home" \
   .tools/apache-maven-3.9.9/bin/mvn -Dmaven.repo.local=.m2/repository spring-boot:run
 ```
 
-## 打包给别人运行
+## Release Package
 
-模型文件较大，建议单独压缩发送：
+The model file is large and should usually be distributed separately:
 
 ```text
 models/multimodalAgent-qwen2.5-7b-ft/multimodalAgent-qwen2.5-7b-ft-q4_k_m.gguf
 ```
 
-生成不含模型权重的应用发布包：
+Build an application archive without model weights:
 
 ```bash
 cd multimodalAgent
 ./scripts/package-release.sh
 ```
 
-脚本会在 `dist/` 下生成 `multimodalAgent-app-时间戳.tar.gz`。发布包包含源码、Dockerfile、docker-compose、脚本、文档、`models/multimodalAgent-qwen2.5-7b-ft/Modelfile` 和 `data/lora/psychqa.jsonl` 数据集；会排除模型权重、模型 zip、运行数据库、Excel 输出、日志、PDF 文档、`target/`、`.m2/`、`.tools/`、IDE 配置等本机产物。
+The script generates `dist/multimodalAgent-app-<timestamp>.tar.gz`. The package includes source code, Dockerfile, docker-compose, scripts, documentation, `models/multimodalAgent-qwen2.5-7b-ft/Modelfile`, and the `data/lora/psychqa.jsonl` dataset. It excludes model weights, model zip files, runtime databases, Excel outputs, logs, PDF documents, `target/`, `.m2/`, `.tools/`, and IDE metadata.
 
-收到项目的人需要把模型 zip 解压到：
+When another machine receives the project, place the model files under:
 
 ```text
 multimodalAgent/models/multimodalAgent-qwen2.5-7b-ft/
 ```
 
-然后执行：
+Then run:
 
 ```bash
 cd multimodalAgent
@@ -193,7 +219,7 @@ cd multimodalAgent
 ./scripts/run-dev.sh
 ```
 
-如果用 Docker 部署数据库、Redis、Chroma、Mailpit：
+For Docker-based dependencies:
 
 ```bash
 docker compose up -d mysql redis chroma mailpit
@@ -201,28 +227,28 @@ docker compose up -d mysql redis chroma mailpit
 ./scripts/run-dev.sh
 ```
 
-如果不是 macOS，或 Ollama/JDK/Maven 不在默认路径，需要先安装 Ollama、JDK 17、Maven，并按实际路径设置 `OLLAMA_BIN`、`JAVA_HOME`、`MAVEN_BIN`。
+On non-macOS systems, or when Ollama, JDK 17, and Maven are installed in custom paths, set `OLLAMA_BIN`, `JAVA_HOME`, and `MAVEN_BIN` accordingly.
 
-## 接入 OpenAI
+## OpenAI Provider
 
 ```bash
 cd multimodalAgent
 AI_PROVIDER=openai \
-OPENAI_API_KEY=你的_API_Key \
+OPENAI_API_KEY=your_api_key \
 OPENAI_MODEL=gpt-4o-mini \
 JAVA_HOME="$PWD/.tools/amazon-corretto-17.jdk/Contents/Home" \
   .tools/apache-maven-3.9.9/bin/mvn -Dmaven.repo.local=.m2/repository spring-boot:run
 ```
 
-## 使用 MySQL、Chroma、SMTP
+## MySQL, Chroma, and SMTP
 
-启动依赖：
+Start dependencies:
 
 ```bash
 docker compose up -d mysql redis chroma mailpit
 ```
 
-使用 MySQL profile：
+Run with the MySQL profile:
 
 ```bash
 AI_PROVIDER=ollama \
@@ -232,19 +258,23 @@ ALERT_MAIL_RECIPIENTS=counselor@example.com \
 mvn spring-boot:run -Dspring-boot.run.profiles=mysql
 ```
 
-Mailpit 管理页面：`http://localhost:8025`
+Mailpit dashboard:
 
-## MCP 工具模式
+```text
+http://localhost:8025
+```
 
-Excel 工具：
+## MCP Tool Modes
 
-- `MCP_EXCEL_MODE=local`：默认写入 `./data/multimodalAgent-reports.xlsx`
-- `MCP_EXCEL_MODE=http`：调用 `MCP_EXCEL_URL/write`
+Excel tool:
 
-邮件工具：
+- `MCP_EXCEL_MODE=local`: writes to `./data/multimodalAgent-reports.xlsx` by default.
+- `MCP_EXCEL_MODE=http`: calls `MCP_EXCEL_URL/write`.
 
-- `MCP_EMAIL_MODE=log`：默认只记录日志，便于本地演示
-- `MCP_EMAIL_MODE=smtp`：使用 Spring Mail 发送
-- `MCP_EMAIL_MODE=http`：调用 `MCP_EMAIL_URL/send`
+Alert tool:
 
-高风险链路按文档实现为：写入报告 -> 写入 Excel -> Excel 成功后发送预警 -> 更新状态。
+- `MCP_EMAIL_MODE=log`: writes alert delivery events to logs for local demos.
+- `MCP_EMAIL_MODE=smtp`: sends email through Spring Mail.
+- `MCP_EMAIL_MODE=http`: calls `MCP_EMAIL_URL/send`.
+
+The high-risk workflow is implemented as: create report -> write Excel -> send alert after Excel succeeds -> update tool status.

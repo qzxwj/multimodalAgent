@@ -112,7 +112,7 @@ public class MediaPipeClient {
             EmotionLabel emotion = emotionFromVisualScore(score);
             double confidence = clamp(0.56 + features.faceCoverage() * 0.28 + features.symmetry() * 0.12, 0.55, 0.9);
             String evidence = String.format(Locale.ROOT,
-                    "MediaPipe 本地视觉分析：faceDetected=%s, faceCoverage=%.2f, browShadow=%.2f, eyeDarkness=%.2f, mouthDown=%.2f, muscleTension=%.2f, brightness=%.2f, saturation=%.2f, visualScore=%.2f。",
+                    "Local MediaPipe visual analysis: faceDetected=%s, faceCoverage=%.2f, browShadow=%.2f, eyeDarkness=%.2f, mouthDown=%.2f, muscleTension=%.2f, brightness=%.2f, saturation=%.2f, visualScore=%.2f.",
                     features.faceDetected(),
                     features.faceCoverage(),
                     features.browShadow(),
@@ -265,7 +265,7 @@ public class MediaPipeClient {
         EmotionLabel emotion = parseEmotion(rawEmotion);
         double score = node.path("score").asDouble(node.path("visualScore").asDouble(scoreForEmotion(emotion)));
         double confidence = node.path("confidence").asDouble(0.82);
-        String evidence = node.path("evidence").asText("MediaPipe Face Mesh 服务返回视觉情绪结果。");
+        String evidence = node.path("evidence").asText("MediaPipe Face Mesh service returned a visual emotion result.");
         if (node.has("features")) {
             evidence = evidence + " features=" + node.path("features");
         }
@@ -275,9 +275,9 @@ public class MediaPipeClient {
     private EmotionLabel parseEmotion(String emotion) {
         String normalized = emotion == null ? "" : emotion.trim().toUpperCase(Locale.ROOT);
         return switch (normalized) {
-            case "高风险", "HIGH", "HIGH_RISK" -> EmotionLabel.HIGH_RISK;
-            case "低落", "DEPRESSED", "SAD" -> EmotionLabel.DEPRESSED;
-            case "焦虑", "ANXIETY", "ANXIOUS" -> EmotionLabel.ANXIETY;
+            case "HIGH", "HIGH_RISK" -> EmotionLabel.HIGH_RISK;
+            case "DEPRESSED", "SAD" -> EmotionLabel.DEPRESSED;
+            case "ANXIETY", "ANXIOUS" -> EmotionLabel.ANXIETY;
             default -> EmotionLabel.NORMAL;
         };
     }
@@ -300,7 +300,7 @@ public class MediaPipeClient {
                 EmotionLabel.NORMAL,
                 0.0,
                 0.45,
-                "视觉分析：当前文件 " + media.filename() + " (" + contentType + ") 无法作为图片解码；如需视频逐帧 Face Mesh，请启用 MEDIAPIPE_MODE=http 对接外部 MediaPipe 服务。");
+                "Visual analysis: file " + media.filename() + " (" + contentType + ") could not be decoded as an image. For frame-by-frame video Face Mesh analysis, enable MEDIAPIPE_MODE=http and connect an external MediaPipe service.");
     }
 
     private double clamp(double value, double min, double max) {
