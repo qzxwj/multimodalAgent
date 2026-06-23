@@ -248,4 +248,3 @@ Excel 工具：
 - `MCP_EMAIL_MODE=http`：调用 `MCP_EMAIL_URL/send`
 
 高风险链路按文档实现为：写入报告 -> 写入 Excel -> Excel 成功后发送预警 -> 更新状态。
-# multimodalAgent
