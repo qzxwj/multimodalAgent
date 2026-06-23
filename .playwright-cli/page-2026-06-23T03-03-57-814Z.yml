@@ -1,0 +1,102 @@
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - generic "多模态智心" [ref=e4]:
+      - generic [ref=e5]: 心
+      - generic [ref=e6]:
+        - paragraph [ref=e7]: Campus MindCare Agent
+        - heading "多模态智心" [level=1] [ref=e8]
+    - generic "系统状态" [ref=e9]:
+      - generic [ref=e10]: 服务不可用
+      - generic [ref=e11]: 模型读取中
+    - form "登录" [ref=e12]:
+      - textbox "账号" [ref=e13]: student
+      - textbox "密码" [ref=e14]: student123
+      - button "进入" [ref=e15] [cursor=pointer]
+      - paragraph [ref=e16]: 账号或密码错误
+  - generic [ref=e17]:
+    - complementary [ref=e18]:
+      - generic [ref=e19]:
+        - generic [ref=e20]:
+          - paragraph [ref=e21]: Private Support
+          - heading "先把此刻的感受放下来" [level=2] [ref=e22]
+          - paragraph [ref=e23]: 文字、语音、图像或视频都可以。系统会先理解输入，再给出温和、可执行的陪伴与建议。
+        - img "在校园心理咨询空间中记录想法的学生" [ref=e24]
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - paragraph [ref=e27]: Intake
+          - heading "多模态输入" [level=2] [ref=e28]
+        - generic [ref=e29]:
+          - textbox "写下你现在想说的话，或上传一段语音 / 图像 / 视频" [ref=e30]
+          - generic "附件输入" [ref=e31]:
+            - generic [ref=e32] [cursor=pointer]:
+              - button "Whisper 语音"
+              - generic [ref=e33]: Whisper
+              - strong [ref=e34]: 语音
+            - generic [ref=e35] [cursor=pointer]:
+              - button "MediaPipe 图像"
+              - generic [ref=e36]: MediaPipe
+              - strong [ref=e37]: 图像
+            - generic [ref=e38] [cursor=pointer]:
+              - button "Face Mesh 视频"
+              - generic [ref=e39]: Face Mesh
+              - strong [ref=e40]: 视频
+          - generic [ref=e41]: 暂无附件
+          - generic [ref=e42]:
+            - button "新会话" [ref=e43] [cursor=pointer]
+            - button "发送" [ref=e44] [cursor=pointer]
+      - generic [ref=e45]:
+        - generic [ref=e46]:
+          - paragraph [ref=e47]: Quick Start
+          - heading "快速开始" [level=2] [ref=e48]
+        - generic [ref=e49]:
+          - button "焦虑倾诉" [ref=e50] [cursor=pointer]
+          - button "低落陪伴" [ref=e51] [cursor=pointer]
+          - button "普通聊天" [ref=e52] [cursor=pointer]
+    - generic [ref=e53]:
+      - generic [ref=e54]:
+        - generic [ref=e55]:
+          - paragraph [ref=e56]: Conversation
+          - heading "学生对话" [level=2] [ref=e57]
+        - generic [ref=e58]: READY
+      - generic [ref=e60]:
+        - paragraph [ref=e61]: Ready
+        - heading "你可以从一句话开始" [level=2] [ref=e62]
+        - paragraph [ref=e63]: 这里适合梳理压力、低落、睡眠和学习安排。你也可以补充语音、图像或视频，让系统更完整地理解当前状态。
+    - complementary [ref=e64]:
+      - generic [ref=e65]:
+        - generic [ref=e66]:
+          - paragraph [ref=e67]: Agent Loop
+          - heading "本轮链路" [level=2] [ref=e68]
+        - generic [ref=e69]:
+          - generic [ref=e70]:
+            - generic [ref=e71]: "01"
+            - strong [ref=e72]: 接收输入
+          - generic [ref=e73]:
+            - generic [ref=e74]: "02"
+            - strong [ref=e75]: 多模态理解
+          - generic [ref=e76]:
+            - generic [ref=e77]: "03"
+            - strong [ref=e78]: 识别需求
+          - generic [ref=e79]:
+            - generic [ref=e80]: "04"
+            - strong [ref=e81]: 检索支持
+          - generic [ref=e82]:
+            - generic [ref=e83]: "05"
+            - strong [ref=e84]: 记录闭环
+          - generic [ref=e85]:
+            - generic [ref=e86]: "06"
+            - strong [ref=e87]: 生成回复
+      - generic [ref=e88]:
+        - generic [ref=e89]:
+          - paragraph [ref=e90]: Runtime
+          - heading "运行环境" [level=2] [ref=e91]
+        - generic [ref=e92]:
+          - generic [ref=e93]:
+            - term [ref=e94]: 模型
+            - definition [ref=e95]: 读取中
+          - generic [ref=e96]:
+            - term [ref=e97]: 向量库
+            - definition [ref=e98]: Chroma / 本地召回
+          - generic [ref=e99]:
+            - term [ref=e100]: 工具
+            - definition [ref=e101]: Excel + 邮件预警
