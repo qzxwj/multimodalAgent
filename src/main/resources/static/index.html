@@ -3,18 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Chengxin AI</title>
-  <link rel="stylesheet" href="/styles.css?v=20260623-chenxin-taste-ui">
+  <title>SerenAI</title>
+  <link rel="stylesheet" href="/styles.css?v=20260624-serenai-brand-lockup">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 </head>
 <body>
   <main class="app-shell">
     <header class="topbar">
-      <div class="identity" aria-label="Chengxin AI">
-        <div class="logo-mark">C</div>
+      <div class="identity" aria-label="SerenAI">
+        <div class="logo-lockup" aria-label="Partner school logos">
+          <img class="school-logo" src="/assets/njuist-sign-cropped.jpg?v=20260624-tight" alt="Nanjing University of Information Science and Technology logo">
+          <img class="school-logo school-logo-wide" src="/assets/setu-sign.svg" alt="South East Technological University logo">
+        </div>
         <div>
-          <p class="kicker">Campus Mental Health Assistant</p>
-          <h1>Chengxin AI</h1>
+          <p class="kicker">Campus Wellbeing Assistant</p>
+          <h1>SerenAI</h1>
         </div>
       </div>
 
@@ -43,7 +46,7 @@
       <aside class="student-intake">
         <section class="welcome-card">
           <div class="welcome-copy">
-            <p class="kicker">Private Support</p>
+            <p class="kicker">Private check-in</p>
             <h2>Put this moment into words first</h2>
             <p>Use text, audio, images, or video. The system will first understand your input, then offer calm and practical support.</p>
           </div>
@@ -52,7 +55,7 @@
 
         <section class="glass-panel intake-card">
           <div class="section-title">
-            <p class="kicker">Intake</p>
+            <p class="kicker">Student input</p>
             <h2>Multimodal input</h2>
           </div>
           <form id="chatForm" class="intake-form">
@@ -85,8 +88,8 @@
 
         <section class="glass-panel sample-card">
           <div class="section-title">
-            <p class="kicker">Quick Start</p>
-            <h2>Quick start</h2>
+            <p class="kicker">Prompt library</p>
+            <h2>Starting points</h2>
           </div>
           <div class="sample-list">
             <button type="button" data-prompt="I have been under a lot of pressure lately and cannot sleep at night. I want to understand what is going on.">Stress support</button>
@@ -99,7 +102,7 @@
       <section class="dialog-stage">
         <div class="stage-head">
           <div>
-            <p class="kicker">Conversation</p>
+            <p class="kicker">Live support</p>
             <h2 id="profileText">Student chat</h2>
           </div>
           <div id="sessionBadge" class="session-chip">Ready</div>
@@ -110,15 +113,15 @@
       <aside class="agent-panel">
         <section class="glass-panel pipeline-card">
           <div class="section-title">
-            <p class="kicker">Agent Loop</p>
-            <h2>Agent loop</h2>
+            <p class="kicker">Care workflow</p>
+            <h2>Response path</h2>
           </div>
           <div id="pipelineSteps" class="pipeline-steps"></div>
         </section>
         <section class="glass-panel model-card">
           <div class="section-title">
-            <p class="kicker">Runtime</p>
-            <h2>Runtime</h2>
+            <p class="kicker">System mode</p>
+            <h2>Model status</h2>
           </div>
           <dl>
             <div><dt>Model</dt><dd id="runtimeModel">Loading</dd></div>
@@ -132,8 +135,8 @@
     <section id="adminView" class="admin-console" hidden>
       <header class="admin-head">
         <div>
-          <p class="kicker">Counselor Workbench</p>
-          <h2>Counselor workbench</h2>
+          <p class="kicker">Counselor dashboard</p>
+          <h2>Student risk overview</h2>
         </div>
         <button id="adminRefresh" type="button">Refresh</button>
       </header>
@@ -155,7 +158,7 @@
         <section class="admin-column">
           <div class="column-head">
             <div>
-              <p class="kicker">Closed Loop</p>
+              <p class="kicker">Report ledger</p>
               <h3>Data loop</h3>
             </div>
           </div>
@@ -165,8 +168,8 @@
         <section class="admin-column">
           <div class="column-head">
             <div>
-              <p class="kicker">Alert Delivery</p>
-              <h3>Alert delivery</h3>
+              <p class="kicker">Notifications</p>
+              <h3>Alert status</h3>
             </div>
           </div>
           <div id="emailRows" class="record-list"></div>
@@ -175,7 +178,7 @@
 
       <form id="knowledgeUploadForm" class="knowledge-bar">
         <div>
-          <p class="kicker">Knowledge Base</p>
+          <p class="kicker">RAG library</p>
           <strong id="knowledgeUploadState">Upload PDF / Markdown / TXT</strong>
         </div>
         <label class="upload-button">
@@ -201,6 +204,6 @@
     </article>
   </section>
 
-  <script src="/app.js?v=20260623-chenxin-english-demo"></script>
+  <script src="/app.js?v=20260624-serenai-brand-lockup"></script>
 </body>
 </html>

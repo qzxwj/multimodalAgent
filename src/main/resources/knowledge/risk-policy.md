@@ -1,6 +1,6 @@
 # Risk Policy
 
-This policy defines how Chengxin AI should handle emotional distress and high-risk student messages in a campus demonstration setting.
+This policy defines how SerenAI should handle emotional distress and high-risk student messages in a campus demonstration setting.
 
 ## Risk Levels
 

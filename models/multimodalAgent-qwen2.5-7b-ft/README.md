@@ -1,6 +1,6 @@
 # multimodalAgent-qwen2.5-7b-ft:latest
 
-This is the local Ollama model directory used by Chengxin AI. The `Modelfile` loads this GGUF weight file:
+This is the local Ollama model directory used by SerenAI. The `Modelfile` loads this GGUF weight file:
 
 ```text
 mindbridge-qwen2.5-7b-ft-q4_k_m.gguf

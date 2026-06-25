@@ -72,6 +72,13 @@ public class HeuristicAiClient implements AiClient {
 
     private String answer(String input, String prompt) {
         String normalized = input.toLowerCase(Locale.ROOT);
+        if (containsAny(normalized, "who are you", "what are you", "your name", "introduce yourself")) {
+            return """
+                    I am SerenAI, a campus wellbeing assistant for student support. I can offer calm companionship, help with common concerns such as stress, anxiety, sleep, study pressure, and relationship difficulties, and route higher-risk situations toward counselor follow-up.
+
+                    I am not a replacement for a professional counselor, but I can help you organize what you are feeling and decide a safer next step.
+                    """;
+        }
         if (RiskLexicon.hasHighRiskSignal(normalized)) {
             return """
                     I am taking what you said seriously. The most important thing right now is not to explain everything perfectly, but to make sure you are safe in this moment.
@@ -85,7 +92,7 @@ public class HeuristicAiClient implements AiClient {
             return consultAnswer(input);
         }
         return """
-                I am here. You can use me as a campus mental-health support assistant: I can respond naturally to everyday conversation, and when you talk about stress, anxiety, sleep, relationships, or study difficulties, I will route the need and provide more specific support.
+                I am SerenAI, and I am here with you. You can use me as a campus mental-health support assistant: I can respond naturally to everyday conversation, and when you talk about stress, anxiety, sleep, relationships, or study difficulties, I will route the need and provide more specific support.
 
                 Would you like to keep it light for now, or talk about one specific thing that has been making life feel stuck recently?
                 """;

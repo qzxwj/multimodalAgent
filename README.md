@@ -1,6 +1,6 @@
-# Chengxin AI Agent
+# SerenAI Agent
 
-Chengxin AI is a campus mental-health companion system for student support, counselor follow-up, and local demonstration of a multimodal AI workflow.
+SerenAI is a campus mental-health companion system for student support, counselor follow-up, and local demonstration of a multimodal AI workflow.
 
 - Dynamic intent routing: classifies each message as `CHAT`, `CONSULT`, or `RISK`; ordinary chat avoids RAG, while counseling and risk messages enter retrieval-augmented support.
 - SSE streaming chat: `/api/chat/stream` returns `text/event-stream` so the frontend can render a live companion-style response.
